@@ -1,0 +1,9 @@
+backend/
+├── ai_service/
+│   ├── __init__.py
+│   ├── data/                  # Pon aquí tus documentos (ej. mesainformacion.txt)
+│   ├── vector_db/             # Aquí se guardará la base de datos (se crea sola)
+│   ├── build_db.py            # Script para procesar los PDFs/TXTs
+│   └── chat_core.py           # La lógica de LangChain y el Chatbot
+├── api/
+│   ├── views.py               # Aquí conectaremos el endpoint del chat

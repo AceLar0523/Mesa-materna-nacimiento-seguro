@@ -1,0 +1,17 @@
+# Django Framework & API
+Django>=5.0,<6.1
+djangorestframework
+django-cors-headers
+psycopg2-binary
+
+# Utilities
+python-dotenv
+
+# LangChain & AI Services
+langchain
+langchain-community
+langchain-text-splitters
+langchain-google-genai
+langchain-chroma
+langchain-classic
+langchain-core

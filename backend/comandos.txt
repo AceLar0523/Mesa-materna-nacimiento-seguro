@@ -1,0 +1,3 @@
+python ai_service/build_db.py
+python manage.py runserver
+python ai_service/build_db.py 

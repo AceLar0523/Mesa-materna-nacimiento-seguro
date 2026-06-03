@@ -1,0 +1,26 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="700" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7ED"/>
+      <stop offset="1" stop-color="#FFEDD5"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="120" y1="90" x2="1030" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FB923C"/>
+      <stop offset="1" stop-color="#EA580C"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="700" rx="40" fill="url(#bg)"/>
+  <circle cx="980" cy="120" r="110" fill="#FDBA74" fill-opacity="0.45"/>
+  <circle cx="180" cy="610" r="150" fill="#FDBA74" fill-opacity="0.28"/>
+  <rect x="130" y="120" width="940" height="460" rx="36" fill="white"/>
+  <rect x="180" y="190" width="270" height="26" rx="13" fill="#FDBA74"/>
+  <rect x="180" y="240" width="520" height="20" rx="10" fill="#FED7AA"/>
+  <rect x="180" y="274" width="480" height="20" rx="10" fill="#FED7AA"/>
+  <rect x="180" y="308" width="420" height="20" rx="10" fill="#FED7AA"/>
+  <rect x="180" y="370" width="220" height="56" rx="28" fill="url(#accent)"/>
+  <rect x="430" y="370" width="220" height="56" rx="28" stroke="#FB923C" stroke-width="3"/>
+  <rect x="760" y="200" width="240" height="300" rx="28" fill="#FFF7ED" stroke="#FDBA74" stroke-width="3"/>
+  <circle cx="880" cy="300" r="62" fill="#FDBA74"/>
+  <path d="M852 300L874 322L910 278" stroke="#EA580C" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="180" y="470" fill="#9A3412" font-family="Arial, sans-serif" font-size="24" font-weight="700">UNFPA Bolivia</text>
+</svg>
