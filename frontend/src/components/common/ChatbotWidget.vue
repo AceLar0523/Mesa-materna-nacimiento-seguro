@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import { ref, nextTick } from 'vue';
+import { apiUrl } from '@/utils/api';
 
 type ChatMessage = {
   text: string;
@@ -74,7 +75,7 @@ const sendMessage = async () => {
   await scrollToBottom();
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/chat/', {
+    const response = await fetch(apiUrl('/chat/'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mensaje: text })

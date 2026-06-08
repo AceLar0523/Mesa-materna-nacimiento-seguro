@@ -1,0 +1,62 @@
+2. Sector Público: Lógica de Usuarios (Sin 
+Autenticación Obligatoria)
+La premisa técnica fundamental de este sector es eliminar la fricción de acceso. Las 
+comunidades rurales, periurbanas y los adolescentes no requieren registrar 
+credenciales tradicionales para consumir servicios críticos o reportar emergencias. 
+A. Requerimientos Técnicos Especiales
+•Persistencia de Sesión Local (State Management): Uso de LocalStorage o 
+IndexedDB en el navegador del cliente para almacenar un identificador único 
+anonimizado (session_token) de 64 caracteres. Esto permite que un 
+adolescente o gestante mantenga un historial local de sus consultas sin haber 
+creado una cuenta.
+•Geolocalización en Tiempo Real: Consumo de la API de Geolocalización del 
+Navegador (navigator.geolocation) con manejo de contingencia (fallback) 
+basado en la IP del dispositivo en zonas con GPS inestable.
+•Sincronización Offline-First (Preparación Fase 3): Implementación de un 
+Service Worker para almacenar en caché los recursos estáticos (mapas base del 
+geolocalizador, guías visuales de alarma) y encolar las solicitudes de 
+emergencia fallidas en una cola de Background Sync hasta detectar 
+conectividad. 
+B. Módulos y Requerimientos de Software
+Módulo 1: Asistente Obstétrico Basado en FUM
+•Lógica de Negocio: El sistema solicita la Fecha de Última Menstruación (FUM). 
+Calcula automáticamente la Edad Gestacional (EG) actual utilizando la Regla de 
+Naegele o la Regla de Wahl. 
+•Funcionalidad:
+•Generación en tiempo de ejecución del cronograma personalizado de los 
+5 Controles Prenatales Mínimos con sus respectivas ventanas de 
+semanas ideales. 
+•Persistencia del perfil obstétrico básico en el almacenamiento local del 
+dispositivo (sin guardarse en el servidor para proteger la privacidad del 
+usuario).
+Módulo 2: Geolocalizador de Centros de Salud
+•Lógica de Negocio: Intersección matemática de coordenadas mediante la 
+fórmula de Haversine para calcular la distancia lineal entre la posición del 
+usuario y los nodos de salud registrados en la base de datos centralizada.
+•Funcionalidad:
+•Renderizado de un mapa interactivo (mediante Leaflet o Maplibre GL) 
+filtrando dinámicamente por nivel de complejidad (I, II o III nivel). 
+•Despliegue de datos de contacto rápidos: Número telefónico de 
+emergencias del centro, horarios y disponibilidad de ambulancia.
+Módulo 3: Protocolo de Señales de Alarma y Botón de Pánico
+•Lógica de Negocio: Disparador inmediato de eventos de alta prioridad hacia el 
+backend.
+•Funcionalidad:
+•Interfaz visual interactiva iconográfica que describe los síntomas críticos 
+(edema de extremidades, visión borrosa, pérdida de líquido amniótico, 
+hemorragia). 
+•Botón de Marcado Rápido y Envío de Alerta: Al presionarse, ejecuta 
+una petición POST asíncrona hacia el endpoint /api/v1/alerts/panic 
+enviando las coordenadas de geolocalización exactas y la marca de 
+tiempo (timestamp), registrándose de forma anónima en la base de 
+datos centralizada para activar los mapas de calor privados. 
+Módulo 4: Espacio de Salud Sexual Adolescente (Anónimo)
+•Lógica de Negocio: Sistema de mensajería asíncrona unidireccional y 
+bidireccional cifrada por sesión local.
+•Funcionalidad:
+•Formulario de envío de consultas sobre anticoncepción y prevención sin 
+campos de nombres, correos o teléfonos. 
+•El backend asocia la consulta a un session_token público de lectura 
+exclusiva. El usuario puede volver a la sección días después y, mediante 
+su token local, verificar si un moderador calificado ha respondido su 
+duda de manera segura.

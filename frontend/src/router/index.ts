@@ -15,6 +15,11 @@ import PublicacionesPage from '@/pages/PublicacionesPage.vue';
 import CampanasPage from '@/pages/CampanasPage.vue';
 import MultimediaPage from '@/pages/MultimediaPage.vue';
 import DonamePage from '@/pages/DonamePage.vue';
+import AsistenteObstetricoPage from '@/pages/client/AsistenteObstetricoPage.vue';
+import GeolocalizadorCentrosPage from '@/pages/client/GeolocalizadorCentrosPage.vue';
+import AlarmaPanicoPage from '@/pages/client/AlarmaPanicoPage.vue';
+import SaludAdolescentePage from '@/pages/client/SaludAdolescentePage.vue';
+import PublicSectorAdminPage from '@/pages/admin/PublicSectorAdminPage.vue';
 import UnfpaBoliviaPage from '@/pages/UnfpaBoliviaPage.vue';
 import RepresentantePage from '@/pages/RepresentantePage.vue';
 import UnfpaLacPage from '@/pages/UnfpaLacPage.vue';
@@ -130,6 +135,32 @@ const router = createRouter({
       path: '/doname',
       name: 'Doname',
       component: DonamePage
+    },
+    {
+      path: '/sector-publico/asistente-obstetrico',
+      name: 'AsistenteObstetrico',
+      component: AsistenteObstetricoPage
+    },
+    {
+      path: '/sector-publico/geolocalizador',
+      name: 'GeolocalizadorCentros',
+      component: GeolocalizadorCentrosPage
+    },
+    {
+      path: '/sector-publico/alarma-panico',
+      name: 'AlarmaPanico',
+      component: AlarmaPanicoPage
+    },
+    {
+      path: '/sector-publico/salud-adolescente',
+      name: 'SaludAdolescente',
+      component: SaludAdolescentePage
+    },
+    {
+      path: '/admin/sector-publico',
+      name: 'PublicSectorAdmin',
+      meta: { hideHeader: true },
+      component: PublicSectorAdminPage
     },
     {
       path: '/:category/:subcategory',

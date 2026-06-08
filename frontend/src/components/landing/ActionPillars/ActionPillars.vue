@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const pillars = [
   { icon: 'pi-box', title: 'Equipamiento Crítico', desc: 'Dotamos a centros de salud rurales con kits de parto limpio y equipos de reanimación neonatal.' },
   { icon: 'pi-home', title: 'Casas Maternas', desc: 'Espacios de acogida para mujeres de comunidades alejadas, garantizando cercanía al hospital antes del parto.' },

@@ -1,12 +1,24 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 # Añadimos chat_materna a la línea de importación
-from .views import BlogPostViewSet, ContactMessageViewSet, RegistroViewSet, blog_stream, chat_materna 
+from .views import (
+    AdolescentConsultationViewSet,
+    BlogPostViewSet,
+    ContactMessageViewSet,
+    HealthCenterViewSet,
+    PanicAlertViewSet,
+    RegistroViewSet,
+    blog_stream,
+    chat_materna,
+)
 
 router = DefaultRouter()
 router.register(r'registros', RegistroViewSet)
 router.register(r'blog-posts', BlogPostViewSet, basename='blog-post')
 router.register(r'contact-messages', ContactMessageViewSet, basename='contact-message')
+router.register(r'health-centers', HealthCenterViewSet, basename='health-center')
+router.register(r'panic-alerts', PanicAlertViewSet, basename='panic-alert')
+router.register(r'adolescent-consultations', AdolescentConsultationViewSet, basename='adolescent-consultation')
 
 urlpatterns = [
     path('blog/stream/', blog_stream, name='blog-stream'),

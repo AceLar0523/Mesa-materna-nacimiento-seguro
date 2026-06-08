@@ -7,8 +7,15 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 
-from .models import BlogPost, ContactMessage, RegistroMaternal
-from .serializers import BlogPostSerializer, ContactMessageSerializer, RegistroSerializer
+from .models import AdolescentConsultation, BlogPost, ContactMessage, HealthCenter, PanicAlert, RegistroMaternal
+from .serializers import (
+    AdolescentConsultationSerializer,
+    BlogPostSerializer,
+    ContactMessageSerializer,
+    HealthCenterSerializer,
+    PanicAlertSerializer,
+    RegistroSerializer,
+)
 
 # --- NUEVO IMPORT PARA EL CHATBOT ---
 from ai_service.chat_core import get_maternal_chatbot_response
@@ -33,6 +40,51 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
     http_method_names = ['get', 'post', 'head', 'options']
+
+
+class HealthCenterViewSet(viewsets.ModelViewSet):
+    queryset = HealthCenter.objects.all()
+    serializer_class = HealthCenterSerializer
+    http_method_names = ['get', 'post', 'patch', 'head', 'options']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        nivel = self.request.query_params.get('nivel')
+        if nivel:
+            queryset = queryset.filter(nivel=nivel)
+        return queryset
+
+
+class PanicAlertViewSet(viewsets.ModelViewSet):
+    queryset = PanicAlert.objects.all()
+    serializer_class = PanicAlertSerializer
+    http_method_names = ['get', 'post', 'patch', 'head', 'options']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        session_token = self.request.query_params.get('session_token')
+        if session_token:
+            queryset = queryset.filter(session_token=session_token)
+        return queryset
+
+
+class AdolescentConsultationViewSet(viewsets.ModelViewSet):
+    queryset = AdolescentConsultation.objects.all()
+    serializer_class = AdolescentConsultationSerializer
+    http_method_names = ['get', 'post', 'patch', 'head', 'options']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        session_token = self.request.query_params.get('session_token')
+        status_filter = self.request.query_params.get('status')
+
+        if session_token:
+            queryset = queryset.filter(session_token=session_token)
+
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+
+        return queryset
 
 @api_view(['GET'])
 def blog_stream(request):

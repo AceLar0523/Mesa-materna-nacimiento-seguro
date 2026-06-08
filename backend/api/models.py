@@ -61,3 +61,100 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f'{self.nombre} - {self.asunto}'
+
+
+class HealthCenter(models.Model):
+    NIVEL_I = 'I'
+    NIVEL_II = 'II'
+    NIVEL_III = 'III'
+
+    LEVELS = [
+        (NIVEL_I, 'Nivel I'),
+        (NIVEL_II, 'Nivel II'),
+        (NIVEL_III, 'Nivel III'),
+    ]
+
+    nombre = models.CharField(max_length=180)
+    nivel = models.CharField(max_length=3, choices=LEVELS)
+    direccion = models.CharField(max_length=255)
+    ciudad = models.CharField(max_length=120, default='')
+    telefono = models.CharField(max_length=40)
+    telefono_emergencia = models.CharField(max_length=40, blank=True, default='')
+    horario = models.CharField(max_length=120, blank=True, default='')
+    ambulancia_disponible = models.BooleanField(default=False)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['nivel', 'nombre']
+
+    def __str__(self):
+        return self.nombre
+
+
+class PanicAlert(models.Model):
+    STATUS_OPEN = 'open'
+    STATUS_ACKNOWLEDGED = 'acknowledged'
+    STATUS_CLOSED = 'closed'
+
+    STATUS_CHOICES = [
+        (STATUS_OPEN, 'Abierta'),
+        (STATUS_ACKNOWLEDGED, 'Reconocida'),
+        (STATUS_CLOSED, 'Cerrada'),
+    ]
+
+    session_token = models.CharField(max_length=64, db_index=True)
+    symptom = models.CharField(max_length=120, blank=True, default='')
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_OPEN)
+    note = models.TextField(blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Alerta {self.session_token[:8]}'
+
+
+class AdolescentConsultation(models.Model):
+    STATUS_PENDING = 'pending'
+    STATUS_ANSWERED = 'answered'
+    STATUS_CLOSED = 'closed'
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Pendiente'),
+        (STATUS_ANSWERED, 'Respondida'),
+        (STATUS_CLOSED, 'Cerrada'),
+    ]
+
+    TOPIC_CONTRACEPCION = 'contracepcion'
+    TOPIC_PREVENCION = 'prevencion'
+    TOPIC_CICLO = 'ciclo'
+    TOPIC_OTRO = 'otro'
+
+    TOPIC_CHOICES = [
+        (TOPIC_CONTRACEPCION, 'Anticoncepción'),
+        (TOPIC_PREVENCION, 'Prevención'),
+        (TOPIC_CICLO, 'Ciclo menstrual'),
+        (TOPIC_OTRO, 'Otra consulta'),
+    ]
+
+    session_token = models.CharField(max_length=64, db_index=True)
+    topic = models.CharField(max_length=24, choices=TOPIC_CHOICES, default=TOPIC_OTRO)
+    question = models.TextField()
+    answer = models.TextField(blank=True, default='')
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_PENDING)
+    responder_name = models.CharField(max_length=120, blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+    answered_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Consulta {self.session_token[:8]}'

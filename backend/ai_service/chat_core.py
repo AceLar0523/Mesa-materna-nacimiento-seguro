@@ -12,8 +12,9 @@ load_dotenv()
 DB_DIR = os.path.join(os.path.dirname(__file__), "vector_db")
 
 def get_maternal_chatbot_response(user_query: str) -> str:
-    # 2. Actualizamos el modelo a gemini-2.0-flash (el más reciente y estable)
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0.2)
+    # 2. Obtenemos el modelo del archivo .env o usamos uno por defecto
+    model_name = os.getenv('GEMINI_MODEL', 'gemini-1.5-flash')
+    llm = ChatGoogleGenerativeAI(model=model_name, temperature=0.2)
     embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
     # 3. Conectar a la base de datos vectorial local

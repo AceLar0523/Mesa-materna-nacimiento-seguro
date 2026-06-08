@@ -56,7 +56,37 @@
         </template>
       </nav>
 
-      <div class="hidden lg:flex">
+      <div class="hidden items-center gap-3 lg:flex">
+        <div class="group relative">
+          <button
+            class="flex items-center gap-2 rounded-full border border-teal-100 bg-white px-4 py-2 text-sm font-bold text-[#0F766E] shadow-sm transition hover:border-teal-200 hover:bg-teal-50"
+            type="button"
+          >
+            Sector público
+            <i class="pi pi-chevron-down text-[0.7rem] transition group-hover:rotate-180"></i>
+          </button>
+
+          <div class="invisible absolute right-0 top-full z-50 mt-3 w-[340px] translate-y-2 opacity-0 transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+            <div class="overflow-hidden rounded-[1.5rem] border border-teal-100 bg-white p-3 shadow-[0_25px_80px_-35px_rgba(15,118,110,0.5)]">
+              <p class="px-3 pb-2 text-[0.65rem] font-black uppercase tracking-[0.3em] text-slate-400">Módulos funcionales</p>
+              <router-link
+                v-for="module in publicSectorModules"
+                :key="module.path"
+                :to="module.path"
+                class="flex items-start gap-3 rounded-2xl px-3 py-3 transition hover:bg-teal-50"
+              >
+                <span class="mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-sm" :class="module.accent">
+                  <i :class="module.icon"></i>
+                </span>
+                <span class="flex-1">
+                  <span class="block text-sm font-bold text-slate-900">{{ module.label }}</span>
+                  <span class="block text-xs text-slate-500">{{ module.description }}</span>
+                </span>
+              </router-link>
+            </div>
+          </div>
+        </div>
+
         <a
           href="/doname"
           target="_blank"
@@ -123,6 +153,30 @@
                 {{ section.label }}
               </router-link>
             </template>
+
+            <details class="rounded-xl border border-teal-100 bg-white">
+              <summary class="flex cursor-pointer list-none items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold text-[#0F766E]">
+                <span>Sector público</span>
+                <i class="pi pi-chevron-down text-xs"></i>
+              </summary>
+              <div class="space-y-2 px-3 pb-3">
+                <router-link
+                  v-for="module in publicSectorModules"
+                  :key="module.path"
+                  :to="module.path"
+                  class="flex items-start gap-3 rounded-xl px-3 py-3 text-sm transition hover:bg-teal-50"
+                  @click="closeDrawer"
+                >
+                  <span class="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br text-white" :class="module.accent">
+                    <i :class="module.icon"></i>
+                  </span>
+                  <span>
+                    <span class="block font-bold text-slate-900">{{ module.label }}</span>
+                    <span class="block text-xs text-slate-500">{{ module.description }}</span>
+                  </span>
+                </router-link>
+              </div>
+            </details>
 
             <a
               href="/doname"
@@ -214,6 +268,37 @@ const menuSections: MenuSection[] = [
     ]
   },
   { key: 'contactanos', label: 'Contactanos', to: '/contactanos' }
+];
+
+const publicSectorModules = [
+  {
+    path: '/sector-publico/asistente-obstetrico',
+    label: 'Asistente obstétrico',
+    description: 'Cálculo local de FUM y cronograma prenatal.',
+    icon: 'pi pi-calendar',
+    accent: 'from-[#F97316] to-[#FB7185]'
+  },
+  {
+    path: '/sector-publico/geolocalizador',
+    label: 'Geolocalizador',
+    description: 'Distancias y centros de salud cercanos.',
+    icon: 'pi pi-map-marker',
+    accent: 'from-[#0F766E] to-[#14B8A6]'
+  },
+  {
+    path: '/sector-publico/alarma-panico',
+    label: 'Señales de alarma',
+    description: 'Síntomas críticos y botón de pánico.',
+    icon: 'pi pi-bell',
+    accent: 'from-[#991B1B] to-[#F97316]'
+  },
+  {
+    path: '/sector-publico/salud-adolescente',
+    label: 'Salud adolescente',
+    description: 'Consultas anónimas por token local.',
+    icon: 'pi pi-comments',
+    accent: 'from-[#7C3AED] to-[#F97316]'
+  }
 ];
 
 const isDrawerOpen = ref(false);
