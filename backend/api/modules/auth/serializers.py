@@ -54,13 +54,18 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('password_confirm')
         password = validated_data.pop('password')
+        email = validated_data.get('email')
+        
+        # Como seguimos usando AbstractUser, el campo 'username' sigue existiendo en DB
+        # Lo usaremos igual al email para mantener consistencia si no se provee uno
+        username = validated_data.pop('username', email)
         
         user = User.objects.create_user(
-            username=validated_data['email'],  # Usar email como username
+            email=email,
+            username=username,
+            password=password,
             **validated_data
         )
-        user.set_password(password)
-        user.save()
         
         return user
 
@@ -75,21 +80,19 @@ class LoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         password = attrs.get('password')
         
-        # Buscar usuario por email
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            raise serializers.ValidationError({
-                'email': 'Usuario no encontrado.'
-            })
-        
-        # Autenticar con el usuario encontrado
-        authenticated_user = authenticate(username=user.username, password=password)
+        # Autenticar usando el USERNAME_FIELD configurado (email)
+        authenticated_user = authenticate(username=email, password=password)
         
         if not authenticated_user:
-            raise serializers.ValidationError({
-                'password': 'Contraseña incorrecta.'
-            })
+            # Verificar si el usuario existe para dar un error específico
+            if not User.objects.filter(email=email).exists():
+                raise serializers.ValidationError({
+                    'email': 'Usuario no encontrado.'
+                })
+            else:
+                raise serializers.ValidationError({
+                    'password': 'Contraseña incorrecta.'
+                })
         
         if not authenticated_user.is_active:
             raise serializers.ValidationError({

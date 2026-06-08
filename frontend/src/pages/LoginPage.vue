@@ -234,12 +234,12 @@ const registerForm = ref({
 });
 
 // Parallax effect
-const handleMouseMove = (e: MouseEvent) => {
+const handleScroll = (_e: Event) => {
   const scrollY = window.scrollY || document.documentElement.scrollTop;
   parallaxOffset.value = scrollY;
 };
 
-window.addEventListener('scroll', handleMouseMove);
+window.addEventListener('scroll', handleScroll);
 
 const handleLogin = async () => {
   if (!loginForm.value.email || !loginForm.value.password) {
