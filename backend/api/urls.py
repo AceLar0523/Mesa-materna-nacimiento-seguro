@@ -9,6 +9,7 @@ router.register(r'blog-posts', BlogPostViewSet, basename='blog-post')
 router.register(r'contact-messages', ContactMessageViewSet, basename='contact-message')
 
 urlpatterns = [
+    path('auth/', include('api.modules.auth.urls')),
     path('blog/stream/', blog_stream, name='blog-stream'),
     path('chat/', chat_materna, name='chat-materna'), # <-- Tu nueva ruta del chatbot
     path('', include(router.urls)),

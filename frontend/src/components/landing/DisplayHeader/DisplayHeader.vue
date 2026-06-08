@@ -56,7 +56,13 @@
         </template>
       </nav>
 
-      <div class="hidden lg:flex">
+      <div class="hidden gap-3 lg:flex items-center">
+        <router-link
+          to="/login"
+          class="rounded-full px-5 py-2 text-sm font-bold text-[#F97316] transition-all hover:bg-orange-50 border-2 border-[#F97316]"
+        >
+          Iniciar Sesión
+        </router-link>
         <a
           href="/doname"
           target="_blank"
@@ -133,6 +139,14 @@
             >
               Doname
             </a>
+
+            <router-link
+              to="/login"
+              class="mt-2 block rounded-xl border-2 border-[#F97316] px-4 py-3 text-center text-sm font-bold text-[#F97316] transition-all hover:bg-orange-50"
+              @click="closeDrawer"
+            >
+              Iniciar Sesión
+            </router-link>
           </div>
         </div>
       </aside>
