@@ -1,10 +1,10 @@
 <template>
   <div>
-    <DisplayHeader v-if="!isSidebarPage" :activeItem="activeItem" />
+    <DisplayHeader v-if="!isAdminPage" :activeItem="activeItem" />
     <Toast position="top-right" />
 
     <router-view />
-    <ChatbotWidget />
+    <ChatbotWidget v-if="!isAdminPage" />
   </div>
 </template>
 
@@ -16,8 +16,9 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
-const isSidebarPage = computed(() => {
-  return Boolean(route.meta.hideHeader);
+const isAdminPage = computed(() => {
+  // Check both direct meta and parent route meta for nested routes
+  return route.matched.some(record => record.meta.hideHeader);
 });
 
 const activeItem = computed(() => {
@@ -25,3 +26,4 @@ const activeItem = computed(() => {
   return null;
 });
 </script>
+

@@ -21,6 +21,7 @@ router.register(r'panic-alerts', PanicAlertViewSet, basename='panic-alert')
 router.register(r'adolescent-consultations', AdolescentConsultationViewSet, basename='adolescent-consultation')
 
 urlpatterns = [
+    path('auth/', include('api.modules.auth.urls')),
     path('blog/stream/', blog_stream, name='blog-stream'),
     path('chat/', chat_materna, name='chat-materna'), # <-- Tu nueva ruta del chatbot
     path('', include(router.urls)),

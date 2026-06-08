@@ -1,5 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LandingPage from '@/pages/LandingPage.vue';
+import LoginPage from '@/pages/auth/LoginPage.vue';
+import AdminLayout from '@/components/layouts/AdminLayout.vue';
+import DashboardPage from '@/pages/admin/DashboardPage.vue';
+import BlogAdminPage from '@/pages/admin/BlogAdminPage.vue';
+import NoticiasAdminPage from '@/pages/admin/NoticiasAdminPage.vue';
+import PublicacionesAdminPage from '@/pages/admin/PublicacionesAdminPage.vue';
+import MultimediaAdminPage from '@/pages/admin/MultimediaAdminPage.vue';
+import InstitucionesAdminPage from '@/pages/admin/InstitucionesAdminPage.vue';
+import UsuariosAdminPage from '@/pages/admin/UsuariosAdminPage.vue';
+import MensajesAdminPage from '@/pages/admin/MensajesAdminPage.vue';
+import ConfiguracionAdminPage from '@/pages/admin/ConfiguracionAdminPage.vue';
 import ConocenosPage from '@/pages/ConocenosPage.vue';
 import NoticiasPage from '@/pages/NoticiasPage.vue';
 import DatosPage from '@/pages/DatosPage.vue';
@@ -38,6 +49,64 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: LandingPage
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginPage,
+      meta: { hideHeader: true }
+    },
+    {
+      path: '/dashboard',
+      component: AdminLayout,
+      meta: { requiresAuth: true, hideHeader: true },
+      children: [
+        {
+          path: '',
+          name: 'dashboard',
+          component: DashboardPage
+        },
+        {
+          path: 'blog',
+          name: 'admin-blog',
+          component: BlogAdminPage
+        },
+        {
+          path: 'noticias',
+          name: 'admin-noticias',
+          component: NoticiasAdminPage
+        },
+        {
+          path: 'publicaciones',
+          name: 'admin-publicaciones',
+          component: PublicacionesAdminPage
+        },
+        {
+          path: 'multimedia',
+          name: 'admin-multimedia',
+          component: MultimediaAdminPage
+        },
+        {
+          path: 'instituciones',
+          name: 'admin-instituciones',
+          component: InstitucionesAdminPage
+        },
+        {
+          path: 'usuarios',
+          name: 'admin-usuarios',
+          component: UsuariosAdminPage
+        },
+        {
+          path: 'mensajes',
+          name: 'admin-mensajes',
+          component: MensajesAdminPage
+        },
+        {
+          path: 'configuracion',
+          name: 'admin-configuracion',
+          component: ConfiguracionAdminPage
+        }
+      ]
     },
     {
       path: '/conocenos',

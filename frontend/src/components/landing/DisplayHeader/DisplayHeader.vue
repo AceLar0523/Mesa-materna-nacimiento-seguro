@@ -87,14 +87,22 @@
           </div>
         </div>
 
-        <a
-          href="/doname"
-          target="_blank"
-          rel="noreferrer"
-          class="rounded-full bg-gradient-to-r from-[#F97316] to-[#991a73] px-5 py-2 text-sm font-bold text-white shadow-md transition-colors hover:from-[#EA580C] hover:to-[#7d155f]"
-        >
-          Doname
-        </a>
+        <div class="hidden items-center gap-3 lg:flex">
+          <router-link
+            to="/login"
+            class="rounded-full border-2 border-[#F97316] px-5 py-2 text-sm font-bold text-[#F97316] transition-all hover:bg-orange-50"
+          >
+            Iniciar Sesión
+          </router-link>
+          <a
+            href="/doname"
+            target="_blank"
+            rel="noreferrer"
+            class="rounded-full bg-gradient-to-r from-[#F97316] to-[#991a73] px-5 py-2 text-sm font-bold text-white shadow-md transition-colors hover:from-[#EA580C] hover:to-[#7d155f]"
+          >
+            Doname
+          </a>
+        </div>
       </div>
 
       <button class="text-[#991a73] lg:hidden" aria-label="Abrir menú" @click="toggleDrawer">
@@ -187,6 +195,14 @@
             >
               Doname
             </a>
+
+            <router-link
+              to="/login"
+              class="mt-2 block rounded-xl border-2 border-[#F97316] px-4 py-3 text-center text-sm font-bold text-[#F97316] transition-all hover:bg-orange-50"
+              @click="closeDrawer"
+            >
+              Iniciar Sesión
+            </router-link>
           </div>
         </div>
       </aside>

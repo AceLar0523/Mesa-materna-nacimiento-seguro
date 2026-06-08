@@ -1,5 +1,18 @@
 from django.contrib import admin
 from .models import AdolescentConsultation, BlogPost, ContactMessage, HealthCenter, PanicAlert, RegistroMaternal
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from .models import BlogPost, ContactMessage, RegistroMaternal, User
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+	list_display = ('id', 'email', 'first_name', 'last_name', 'role', 'is_active', 'created_at')
+	list_filter = ('role', 'is_active', 'created_at')
+	search_fields = ('email', 'first_name', 'last_name')
+	fieldsets = BaseUserAdmin.fieldsets + (
+		('Información Adicional', {'fields': ('role', 'created_at', 'updated_at')}),
+	)
+	readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(RegistroMaternal)
