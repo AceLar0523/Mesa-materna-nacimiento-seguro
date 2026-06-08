@@ -16,7 +16,7 @@
               <h2 class="mt-2 text-2xl font-black text-slate-900">Botón de pánico anónimo</h2>
             </div>
             <div class="rounded-2xl bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600">
-              Token local activo: {{ sessionTokenPreview }}
+              Acceso guardado: {{ sessionTokenPreview }}
             </div>
           </div>
 
@@ -72,7 +72,7 @@
               class="rounded-full border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-700 transition hover:border-rose-200 hover:text-rose-600"
               @click="requestCurrentLocation"
             >
-              Detectar ubicación
+              Actualizar ubicación
             </button>
           </div>
 
@@ -83,12 +83,12 @@
           <article class="rounded-[1.75rem] border border-rose-100 bg-white p-5 shadow-sm">
             <p class="text-xs font-bold uppercase tracking-[0.25em] text-rose-500">Ubicación actual</p>
             <h3 class="mt-2 text-xl font-black text-slate-900">{{ locationLabel }}</h3>
-            <p class="mt-2 text-sm text-slate-600">La coordenada se envía junto con la marca de tiempo al endpoint de alertas.</p>
+            <p class="mt-2 text-sm text-slate-600">Se actualiza mientras el navegador conserve el servicio de ubicación activo.</p>
           </article>
           <article class="rounded-[1.75rem] border border-orange-100 bg-gradient-to-br from-orange-50 to-white p-5 shadow-sm">
             <p class="text-xs font-bold uppercase tracking-[0.25em] text-orange-500">Respuesta rápida</p>
             <h3 class="mt-2 text-xl font-black text-slate-900">{{ lastAlertSummary }}</h3>
-            <p class="mt-2 text-sm text-slate-600">Historial anónimo persistido por session_token.</p>
+            <p class="mt-2 text-sm text-slate-600">Historial guardado en este navegador.</p>
           </article>
         </div>
       </div>
@@ -113,7 +113,7 @@
               </div>
               <h2 class="mt-5 text-2xl font-black">Botón de pánico</h2>
               <p class="mt-2 max-w-sm text-sm leading-6 text-rose-100">
-                Al presionarlo, se dispara una petición POST anónima hacia el backend con tus coordenadas y el síntoma seleccionado.
+               Al presionarlo, se dispara una alerta inmediata con tu ubicación actual y el síntoma elegido.
               </p>
             </div>
           </div>
@@ -142,7 +142,7 @@
               <p class="mt-1 text-xs text-slate-500">{{ toPointLabel(alert.latitude, alert.longitude) }}</p>
             </article>
             <p v-if="alerts.length === 0" class="rounded-2xl border border-dashed border-slate-200 p-4 text-sm text-slate-500">
-              No hay alertas previas para este session_token.
+              No hay alertas previas guardadas en este navegador.
             </p>
           </div>
         </div>
@@ -154,7 +154,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import Footer from '@/components/landing/Footer/Footer.vue';
 import PageHero from '@/components/common/PageHero.vue';
 import { apiUrl } from '@/utils/api';
@@ -168,6 +168,7 @@ const submitting = ref(false);
 const statusMessage = ref('Prepara el botón antes de un evento crítico.');
 const alerts = ref<PanicAlert[]>([]);
 const currentLocation = ref({ latitude: -16.5, longitude: -68.15 });
+let watchId: number | null = null;
 
 const symptoms = [
   {
@@ -200,30 +201,74 @@ const symptoms = [
   },
 ];
 
-const sessionTokenPreview = computed(() => (sessionToken.value ? `${sessionToken.value.slice(0, 8)}…${sessionToken.value.slice(-6)}` : 'sin token'));
+const sessionTokenPreview = computed(() => (sessionToken.value ? `${sessionToken.value.slice(0, 8)}…${sessionToken.value.slice(-6)}` : 'sin acceso'));
 const locationLabel = computed(() => `${currentLocation.value.latitude.toFixed(4)}, ${currentLocation.value.longitude.toFixed(4)}`);
 const lastAlertSummary = computed(() => alerts.value[0]?.symptom || 'Esperando primera alerta');
 
-function requestCurrentLocation(): void {
-  if (!navigator.geolocation) {
-    statusMessage.value = 'Tu navegador no soporta geolocalización. Usa las coordenadas manuales.';
+function applyLivePosition(latitude: number, longitude: number): void {
+  currentLocation.value = { latitude, longitude };
+  manualLatitude.value = latitude.toFixed(6);
+  manualLongitude.value = longitude.toFixed(6);
+}
+
+async function fallbackByIp(): Promise<void> {
+  try {
+    const response = await fetch('https://ipwho.is/?fields=success,latitude,longitude,message');
+    const data = (await response.json()) as { success: boolean; latitude?: number; longitude?: number };
+
+    if (data.success && typeof data.latitude === 'number' && typeof data.longitude === 'number') {
+      applyLivePosition(data.latitude, data.longitude);
+      statusMessage.value = 'GPS inestable. Se usó una ubicación aproximada por red.';
+      return;
+    }
+  } catch {
+    // Se mantiene la posición previa si no hay respaldo por red.
+  }
+
+  statusMessage.value = 'No se pudo actualizar la ubicación automáticamente.';
+}
+
+async function queueOfflineAlert(payload: Record<string, unknown>): Promise<void> {
+  if (typeof window === 'undefined') {
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(
+  const queueKey = 'mesa-panic-alert-queue';
+  const queue = JSON.parse(window.localStorage.getItem(queueKey) ?? '[]') as Record<string, unknown>[];
+  queue.push(payload);
+  window.localStorage.setItem(queueKey, JSON.stringify(queue));
+
+  if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: 'QUEUE_PANIC_ALERT', payload });
+  }
+
+  if ('serviceWorker' in navigator) {
+    const registration = await navigator.serviceWorker.ready;
+    const syncRegistration = registration as ServiceWorkerRegistration & {
+      sync?: { register(tag: string): Promise<void> };
+    };
+    await syncRegistration.sync?.register('panic-alert-sync').catch(() => undefined);
+  }
+
+  statusMessage.value = 'Sin conexión. La alerta quedó en cola para reenviarse.';
+}
+
+function requestCurrentLocation(): void {
+  if (!navigator.geolocation) {
+    statusMessage.value = 'Tu navegador no soporta ubicación en tiempo real. Se usará la red como respaldo.';
+    void fallbackByIp();
+    return;
+  }
+
+  watchId = navigator.geolocation.watchPosition(
     (position) => {
-      currentLocation.value = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-      manualLatitude.value = position.coords.latitude.toFixed(6);
-      manualLongitude.value = position.coords.longitude.toFixed(6);
-      statusMessage.value = 'Ubicación obtenida correctamente.';
+      applyLivePosition(position.coords.latitude, position.coords.longitude);
+      statusMessage.value = 'Ubicación actualizada en tiempo real.';
     },
     () => {
-      statusMessage.value = 'No se pudo detectar GPS. Mantén las coordenadas manuales.';
+      void fallbackByIp();
     },
-    { enableHighAccuracy: true, timeout: 12000, maximumAge: 120000 }
+    { enableHighAccuracy: true, timeout: 12000, maximumAge: 10000 }
   );
 }
 
@@ -237,6 +282,7 @@ function applyManualPosition(): void {
   }
 
   currentLocation.value = { latitude, longitude };
+  statusMessage.value = 'Ubicación manual lista para enviar.';
 }
 
 function toPointLabel(latitude: number | string, longitude: number | string): string {
@@ -310,7 +356,16 @@ async function sendAlert(): Promise<void> {
 
     await loadAlerts();
   } catch (error) {
-    statusMessage.value = error instanceof Error ? error.message : 'Error inesperado al enviar la alerta.';
+    await queueOfflineAlert({
+      session_token: sessionToken.value,
+      symptom: symptoms.find((symptom) => symptom.key === selectedSymptom.value)?.label ?? selectedSymptom.value,
+      latitude: currentLocation.value.latitude,
+      longitude: currentLocation.value.longitude,
+      status: 'open',
+      note: 'Alerta en cola por falta de conexión.',
+      created_at: new Date().toISOString(),
+    });
+    statusMessage.value = error instanceof Error ? error.message : 'La alerta quedó guardada para reenviarse.';
   } finally {
     submitting.value = false;
   }
@@ -321,6 +376,12 @@ onMounted(async () => {
   sessionToken.value = ensureSessionToken();
   requestCurrentLocation();
   await loadAlerts();
+});
+
+onBeforeUnmount(() => {
+  if (watchId !== null && navigator.geolocation) {
+    navigator.geolocation.clearWatch(watchId);
+  }
 });
 </script>
 

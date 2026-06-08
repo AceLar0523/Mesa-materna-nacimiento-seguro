@@ -25,4 +25,10 @@ app.component('Button', Button);
 app.component('Toast', Toast);
 app.component('Select', Select);
 
+if ('serviceWorker' in navigator) {
+	window.addEventListener('load', () => {
+		navigator.serviceWorker.register('/sw.js').catch(() => undefined);
+	});
+}
+
 app.mount('#app');

@@ -7,34 +7,35 @@
       backgroundImage="/img/fondo14.avif"
     />
 
-    <section class="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+    <section class="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.12fr_0.88fr] lg:px-8">
       <div class="space-y-6">
-        <div class="rounded-[2rem] border border-orange-100 bg-white/85 p-6 shadow-[0_20px_80px_-35px_rgba(249,115,22,0.45)] backdrop-blur">
+        <div class="rounded-[2.25rem] border border-orange-100 bg-white/85 p-6 shadow-[0_20px_80px_-35px_rgba(249,115,22,0.45)] backdrop-blur">
           <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p class="text-xs font-bold uppercase tracking-[0.3em] text-[#F97316]">Persistencia local</p>
-              <h2 class="mt-2 text-2xl font-black text-slate-900">Perfil obstétrico en tu dispositivo</h2>
+              <p class="text-xs font-bold uppercase tracking-[0.3em] text-[#F97316]">Preparado para uso</p>
+              <h2 class="mt-2 text-2xl font-black text-slate-900">Control obstétrico basado en FUM</h2>
             </div>
             <div class="rounded-2xl bg-orange-50 px-4 py-2 text-sm font-semibold text-[#EA580C]">
-              {{ isSaved ? 'Guardado en localStorage' : 'Sin datos guardados' }}
+              {{ isSaved ? 'Listo para continuar' : 'Aún sin registrar' }}
             </div>
           </div>
 
           <div class="mt-6 grid gap-4 md:grid-cols-3">
-            <article class="rounded-3xl border border-orange-100 bg-gradient-to-br from-orange-50 to-white p-4">
+            <article class="rounded-[1.8rem] border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-white p-5 shadow-sm">
               <p class="text-xs font-bold uppercase tracking-[0.25em] text-orange-500">Edad gestacional</p>
-              <p class="mt-3 text-4xl font-black text-slate-900">{{ gestationalWeeks }}<span class="text-xl text-slate-500"> sem</span></p>
-              <p class="mt-1 text-sm text-slate-600">{{ gestationalDays }} días estimados</p>
+              <p class="mt-3 text-5xl font-black text-slate-900">{{ gestationalWeeks }}</p>
+              <p class="text-sm font-semibold text-slate-500">semanas</p>
+              <p class="mt-3 text-sm text-slate-600">{{ gestationalDays }} días acumulados</p>
             </article>
-            <article class="rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white p-4">
+            <article class="rounded-[1.8rem] border border-rose-100 bg-gradient-to-br from-rose-50 via-white to-white p-5 shadow-sm">
               <p class="text-xs font-bold uppercase tracking-[0.25em] text-rose-500">Fecha probable de parto</p>
-              <p class="mt-3 text-2xl font-black text-slate-900">{{ dueDateLabel }}</p>
-              <p class="mt-1 text-sm text-slate-600">Calculada con {{ calculationMethodLabel }}</p>
+              <p class="mt-3 text-3xl font-black text-slate-900">{{ dueDateLabel }}</p>
+              <p class="mt-1 text-sm text-slate-600">Se activa cuando ingresas la FUM.</p>
             </article>
-            <article class="rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-4">
+            <article class="rounded-[1.8rem] border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-white p-5 shadow-sm">
               <p class="text-xs font-bold uppercase tracking-[0.25em] text-emerald-500">Próximo control</p>
-              <p class="mt-3 text-2xl font-black text-slate-900">{{ nextControl?.title ?? 'Completar FUM' }}</p>
-              <p class="mt-1 text-sm text-slate-600">{{ nextControl?.window ?? 'Se completa automáticamente' }}</p>
+              <p class="mt-3 text-3xl font-black text-slate-900">{{ nextControl?.title ?? '0' }}</p>
+              <p class="mt-1 text-sm text-slate-600">{{ nextControl?.window ?? '0 semanas' }}</p>
             </article>
           </div>
 
@@ -136,7 +137,7 @@
             </div>
           </div>
           <p class="mt-4 text-sm leading-6 text-slate-600">
-            Este asistente no guarda historial clínico en el servidor. Solo conserva la FUM y el método de cálculo de forma local para reabrir el cronograma cuando vuelvas.
+            El panel arranca en cero y solo toma forma cuando ingresas la fecha. Así se puede usar de inmediato sin exponer datos antes de tiempo.
           </p>
         </div>
       </aside>
@@ -201,14 +202,12 @@ const parsedFum = computed(() => {
 
 const referenceDays = computed(() => (calculationMethod.value === 'wahl' ? 285 : 280));
 
-const today = new Date();
-
 const gestationalDays = computed(() => {
   if (!parsedFum.value) {
     return 0;
   }
 
-  const elapsed = Math.max(0, Math.floor((today.getTime() - parsedFum.value.getTime()) / 86400000));
+  const elapsed = Math.max(0, Math.floor((new Date().getTime() - parsedFum.value.getTime()) / 86400000));
   return elapsed;
 });
 
@@ -226,7 +225,7 @@ const dueDate = computed(() => {
 
 const dueDateLabel = computed(() => {
   if (!dueDate.value) {
-    return 'Agrega tu FUM';
+    return '0';
   }
 
   return dueDate.value.toLocaleDateString('es-BO', {
@@ -280,7 +279,7 @@ const controlPlan = computed(() => {
   ];
 });
 
-const nextControl = computed(() => controlPlan.value.find((control) => control.active) ?? controlPlan.value.find((control) => gestationalWeeks.value < Number.parseInt(control.window, 10)) ?? null);
+const nextControl = computed(() => controlPlan.value.find((control) => control.active) ?? null);
 
 const saveProfile = () => {
   if (typeof window === 'undefined') {

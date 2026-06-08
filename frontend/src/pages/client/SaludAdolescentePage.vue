@@ -3,7 +3,7 @@
     <PageHero
       kicker="Sector público"
       title="Espacio de salud sexual adolescente"
-      subtitle="Consulta de forma anónima con un token local, conserva el historial en tu navegador y revisa si ya existe una respuesta segura del equipo moderador."
+      subtitle="Consulta de forma anónima, conserva el historial en tu navegador y revisa si ya existe una respuesta segura del equipo moderador."
       backgroundImage="/img/fondo14.avif"
     />
 
@@ -16,7 +16,7 @@
               <h2 class="mt-2 text-2xl font-black text-slate-900">Consulta sin nombre, correo ni teléfono</h2>
             </div>
             <div class="rounded-2xl bg-violet-50 px-4 py-2 text-sm font-semibold text-violet-700">
-              Token local: {{ sessionTokenPreview }}
+              Código guardado: {{ sessionTokenPreview }}
             </div>
           </div>
 
@@ -80,14 +80,14 @@
 
         <div class="grid gap-4 md:grid-cols-2">
           <article class="rounded-[1.75rem] border border-violet-100 bg-white p-5 shadow-sm">
-            <p class="text-xs font-bold uppercase tracking-[0.25em] text-violet-600">Token persistente</p>
+            <p class="text-xs font-bold uppercase tracking-[0.25em] text-violet-600">Acceso guardado</p>
             <h3 class="mt-2 text-xl font-black text-slate-900">{{ sessionTokenPreview }}</h3>
-            <p class="mt-2 text-sm text-slate-600">Puedes volver días después y seguir viendo tus respuestas asociadas al mismo token local.</p>
+            <p class="mt-2 text-sm text-slate-600">Puedes volver días después y seguir viendo tus respuestas guardadas en este navegador.</p>
           </article>
           <article class="rounded-[1.75rem] border border-orange-100 bg-gradient-to-br from-orange-50 to-white p-5 shadow-sm">
             <p class="text-xs font-bold uppercase tracking-[0.25em] text-orange-500">Estado</p>
             <h3 class="mt-2 text-xl font-black text-slate-900">{{ consultations.length }} conversaciones</h3>
-            <p class="mt-2 text-sm text-slate-600">Las respuestas quedan cifradas por sesión local y son visibles solo en este navegador.</p>
+            <p class="mt-2 text-sm text-slate-600">Las respuestas quedan asociadas a este navegador para que puedas retomarlas luego.</p>
           </article>
         </div>
       </div>
@@ -99,7 +99,7 @@
               <p class="text-xs font-bold uppercase tracking-[0.3em] text-slate-500">Bandeja local</p>
               <h3 class="mt-2 text-2xl font-black text-slate-900">Tus consultas guardadas</h3>
             </div>
-            <span class="rounded-full bg-violet-50 px-3 py-1 text-xs font-bold text-violet-700">Anónimo</span>
+              <span class="rounded-full bg-violet-50 px-3 py-1 text-xs font-bold text-violet-700">Anónimo</span>
           </div>
 
           <div class="mt-5 space-y-4">
@@ -134,7 +134,7 @@
           <p class="text-xs font-bold uppercase tracking-[0.35em] text-violet-600">Guía rápida</p>
           <ul class="mt-4 space-y-3 text-sm text-slate-600">
             <li class="flex gap-3"><i class="pi pi-check-circle mt-1 text-violet-600"></i> No escribas nombres, correos ni teléfonos.</li>
-            <li class="flex gap-3"><i class="pi pi-check-circle mt-1 text-violet-600"></i> El token vive solo en este dispositivo y navegador.</li>
+            <li class="flex gap-3"><i class="pi pi-check-circle mt-1 text-violet-600"></i> Este espacio queda guardado en tu navegador.</li>
             <li class="flex gap-3"><i class="pi pi-check-circle mt-1 text-violet-600"></i> Puedes volver luego y verificar si ya hay respuesta.</li>
           </ul>
         </div>
@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import Footer from '@/components/landing/Footer/Footer.vue';
 import PageHero from '@/components/common/PageHero.vue';
 import { apiUrl } from '@/utils/api';
@@ -166,7 +166,7 @@ const topicChips = [
   { value: 'otro', label: 'Otra consulta' },
 ] as const;
 
-const sessionTokenPreview = computed(() => (sessionToken.value ? `${sessionToken.value.slice(0, 8)}…${sessionToken.value.slice(-6)}` : 'sin token'));
+const sessionTokenPreview = computed(() => (sessionToken.value ? `${sessionToken.value.slice(0, 8)}…${sessionToken.value.slice(-6)}` : 'sin acceso'));
 
 function topicLabel(topic: AdolescentConsultation['topic']): string {
   if (topic === 'contracepcion') return 'Anticoncepción';
@@ -249,5 +249,13 @@ onMounted(async () => {
       question.value = draft;
     }
   }
+});
+
+watch(question, (value) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  window.localStorage.setItem(`${PUBLIC_SECTOR_TOKEN_KEY}:adolescent-draft`, value);
 });
 </script>

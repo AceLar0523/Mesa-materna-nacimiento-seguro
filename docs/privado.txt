@@ -1,0 +1,10 @@
+Sector público, administración separada por módulo:
+- `/admin/sector-publico` es solo un hub de entrada.
+- `/admin/sector-publico/centros` administra hospitales, hospitales municipales y centros de salud.
+- `/admin/sector-publico/alertas` administra las alertas de pánico recibidas desde el botón público.
+- `/admin/sector-publico/consultas` administra las consultas anónimas de salud sexual adolescente.
+
+Flujo público a administración:
+- El geolocalizador publica centros de salud vía `POST/PATCH` a `health-centers`.
+- El botón de pánico envía alertas a `panic-alerts` con ubicación en tiempo real y cola offline.
+- El espacio adolescente crea y actualiza consultas anónimas en `adolescent-consultations`.
