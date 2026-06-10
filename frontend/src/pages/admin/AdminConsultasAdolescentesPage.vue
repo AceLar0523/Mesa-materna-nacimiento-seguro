@@ -1,6 +1,13 @@
 <template>
   <div class="space-y-6">
     <main class="grid gap-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <p class="text-sm text-slate-500">Ultima sincronizacion: {{ lastSyncLabel }}</p>
+        <button type="button" class="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white" @click="loadConsultations">
+          Actualizar ahora
+        </button>
+      </div>
+
       <section class="grid gap-4">
         <article v-for="consultation in consultations" :key="consultation.id" class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div class="flex flex-wrap items-start justify-between gap-4">
@@ -9,9 +16,9 @@
                 <span class="rounded-full bg-violet-50 px-3 py-1 text-xs font-bold text-violet-700">{{ consultation.status }}</span>
                 <h3 class="font-black text-slate-900">{{ topicLabel(consultation.topic) }}</h3>
               </div>
-              <p class="mt-2 text-sm text-slate-600">{{ consultation.question }}</p>
+              <p class="mt-2 text-sm text-slate-600">{{ consultation.question || 'Consulta sin texto' }}</p>
             </div>
-            <p class="text-xs text-slate-500">{{ consultation.session_token.slice(0, 8) }}…</p>
+            <p class="text-xs text-slate-500">{{ (consultation.session_token || '').slice(0, 8) || 'sin-token' }}…</p>
           </div>
 
           <div class="mt-4 grid gap-3 md:grid-cols-[1fr_220px]">
@@ -41,17 +48,52 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { apiUrl } from '@/utils/api';
-import { type AdolescentConsultation } from '../client/public-sector';
+import { toApiList, type AdolescentConsultation } from '../client/public-sector';
 
 const consultations = ref<AdolescentConsultation[]>([]);
 const replyDraft = reactive<Record<number, string>>({});
 const moderatorDraft = reactive<Record<number, string>>({});
+const lastSyncAt = ref<Date | null>(null);
+let refreshIntervalId: number | null = null;
+
+const lastSyncLabel = computed(() => {
+  if (!lastSyncAt.value) {
+    return 'sin sincronizar';
+  }
+
+  return lastSyncAt.value.toLocaleTimeString('es-BO', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+});
 
 async function loadConsultations(): Promise<void> {
-  const response = await fetch(apiUrl('/adolescent-consultations/'));
-  consultations.value = response.ok ? ((await response.json()) as AdolescentConsultation[]) : [];
+  const response = await fetch(apiUrl('/adolescent-consultations/'), {
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    consultations.value = [];
+    lastSyncAt.value = new Date();
+    return;
+  }
+
+  const payload = (await response.json()) as unknown;
+  consultations.value = toApiList<AdolescentConsultation>(payload);
+
+  for (const consultation of consultations.value) {
+    if (!(consultation.id in replyDraft)) {
+      replyDraft[consultation.id] = consultation.answer || '';
+    }
+    if (!(consultation.id in moderatorDraft)) {
+      moderatorDraft[consultation.id] = consultation.responder_name || '';
+    }
+  }
+
+  lastSyncAt.value = new Date();
 }
 
 function topicLabel(topic: AdolescentConsultation['topic']): string {
@@ -86,6 +128,15 @@ async function closeConsultation(consultationId: number): Promise<void> {
 onMounted(async () => {
   document.title = 'Admin consultas | Mesa de Maternidad';
   await loadConsultations();
+  refreshIntervalId = window.setInterval(() => {
+    void loadConsultations();
+  }, 8000);
+});
+
+onBeforeUnmount(() => {
+  if (refreshIntervalId !== null) {
+    window.clearInterval(refreshIntervalId);
+  }
 });
 </script>
 

@@ -82,7 +82,7 @@
             <article v-for="alert in alerts" :key="alert.id" class="rounded-[1.5rem] border border-slate-100 bg-slate-50 p-4">
               <div class="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">{{ alert.session_token.slice(0, 8) }}…</p>
+                  <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">{{ (alert.session_token || '').slice(0, 8) || 'sin-token' }}…</p>
                   <h3 class="mt-1 font-black text-slate-900">{{ alert.symptom || 'Sin síntoma' }}</h3>
                   <p class="mt-1 text-sm text-slate-600">{{ toLabel(alert.latitude, alert.longitude) }}</p>
                 </div>
@@ -112,9 +112,9 @@
             <article v-for="consultation in consultations" :key="consultation.id" class="rounded-[1.5rem] border border-slate-100 bg-slate-50 p-4">
               <div class="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">{{ consultation.session_token.slice(0, 8) }}…</p>
+                  <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">{{ (consultation.session_token || '').slice(0, 8) || 'sin-token' }}…</p>
                   <h3 class="mt-1 font-black text-slate-900">{{ topicLabel(consultation.topic) }}</h3>
-                  <p class="mt-2 text-sm text-slate-600">{{ consultation.question }}</p>
+                  <p class="mt-2 text-sm text-slate-600">{{ consultation.question || 'Consulta sin texto' }}</p>
                 </div>
                 <span class="rounded-full px-3 py-1 text-xs font-bold" :class="consultation.status === 'answered' ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700'">{{ consultation.status }}</span>
               </div>
@@ -149,6 +149,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { apiUrl } from '@/utils/api';
 import {
+  toApiList,
   type AdolescentConsultation,
   type HealthCenter,
   type PanicAlert,
@@ -242,14 +243,16 @@ function toLabel(latitude: number | string, longitude: number | string): string 
 
 async function loadAll(): Promise<void> {
   const [centersResponse, alertsResponse, consultationsResponse] = await Promise.all([
-    fetch(apiUrl('/health-centers/')),
-    fetch(apiUrl('/panic-alerts/')),
-    fetch(apiUrl('/adolescent-consultations/')),
+    fetch(apiUrl('/health-centers/'), { cache: 'no-store' }),
+    fetch(apiUrl('/panic-alerts/'), { cache: 'no-store' }),
+    fetch(apiUrl('/adolescent-consultations/'), { cache: 'no-store' }),
   ]);
 
-  centers.value = centersResponse.ok ? ((await centersResponse.json()) as HealthCenter[]) : [];
-  alerts.value = alertsResponse.ok ? ((await alertsResponse.json()) as PanicAlert[]) : [];
-  consultations.value = consultationsResponse.ok ? ((await consultationsResponse.json()) as AdolescentConsultation[]) : [];
+  centers.value = centersResponse.ok ? toApiList<HealthCenter>((await centersResponse.json()) as unknown) : [];
+  alerts.value = alertsResponse.ok ? toApiList<PanicAlert>((await alertsResponse.json()) as unknown) : [];
+  consultations.value = consultationsResponse.ok
+    ? toApiList<AdolescentConsultation>((await consultationsResponse.json()) as unknown)
+    : [];
 }
 
 async function saveCenter(): Promise<void> {

@@ -80,9 +80,17 @@
             >
               Usar coordenadas manuales
             </button>
+            <button
+              type="button"
+              class="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-teal-200 hover:text-teal-700"
+              @click="loadCenters"
+            >
+              Actualizar centros
+            </button>
           </div>
 
           <p class="mt-4 text-sm text-slate-500">{{ statusMessage }}</p>
+          <p class="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Ultima sincronizacion: {{ lastSyncLabel }}</p>
         </div>
 
         <div class="space-y-4">
@@ -161,7 +169,7 @@ import 'leaflet/dist/leaflet.css';
 import Footer from '@/components/landing/Footer/Footer.vue';
 import PageHero from '@/components/common/PageHero.vue';
 import { apiUrl } from '@/utils/api';
-import { calculateDistanceKm, type GeoPoint, type HealthCenter, type PublicSectorLevel, type PublicSectorLevelFilter, toNumber } from './public-sector';
+import { calculateDistanceKm, toApiList, type GeoPoint, type HealthCenter, type PublicSectorLevel, type PublicSectorLevelFilter, toNumber } from './public-sector';
 
 type CenterWithDistance = HealthCenter & { distance: number };
 
@@ -183,12 +191,14 @@ const currentPosition = ref<GeoPoint>({ latitude: -16.5, longitude: -68.15 });
 const manualLatitude = ref('-16.500000');
 const manualLongitude = ref('-68.150000');
 const statusMessage = ref('Cargando centros de salud y preparando el mapa...');
+const lastSyncAt = ref<Date | null>(null);
 const mapContainer = ref<HTMLDivElement | null>(null);
 
 let mapInstance: L.Map | null = null;
 let currentPositionLayer: L.CircleMarker | null = null;
 let centerLayerGroup: L.LayerGroup | null = null;
 let watchId: number | null = null;
+let refreshIntervalId: number | null = null;
 
 const levelFilters: Array<{ key: PublicSectorLevelFilter; label: string }> = [
   { key: 'all', label: 'Todos' },
@@ -199,6 +209,17 @@ const levelFilters: Array<{ key: PublicSectorLevelFilter; label: string }> = [
 
 const activeLevelLabel = computed(() => levelFilters.find((item) => item.key === activeLevel.value)?.label ?? 'Todos');
 const currentPositionLabel = computed(() => `${currentPosition.value.latitude.toFixed(4)}, ${currentPosition.value.longitude.toFixed(4)}`);
+const lastSyncLabel = computed(() => {
+  if (!lastSyncAt.value) {
+    return 'sin sincronizar';
+  }
+
+  return lastSyncAt.value.toLocaleTimeString('es-BO', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+});
 
 const visibleCenters = computed<CenterWithDistance[]>(() => {
   const filtered = activeLevel.value === 'all' ? centers.value : centers.value.filter((center) => center.nivel === activeLevel.value);
@@ -288,18 +309,23 @@ function renderMapLayers(): void {
 
 async function loadCenters(): Promise<void> {
   try {
-    const response = await fetch(apiUrl('/health-centers/'));
+    const response = await fetch(apiUrl('/health-centers/'), {
+      cache: 'no-store',
+    });
     if (!response.ok) {
       throw new Error('No fue posible cargar los centros desde la API.');
     }
 
-    const data = (await response.json()) as HealthCenter[];
+    const payload = (await response.json()) as unknown;
+    const data = toApiList<HealthCenter>(payload);
     centers.value = data.length > 0 ? data : demoCenters;
     statusMessage.value = data.length > 0 ? 'Centros sincronizados desde la base de datos.' : 'No hay centros cargados todavía, por eso se usan datos semilla.';
+    lastSyncAt.value = new Date();
   } catch (error) {
     centers.value = demoCenters;
     statusMessage.value = 'La API no respondió. Se activaron centros de demostración para no bloquear la vista.';
     errorMessage.value = error instanceof Error ? error.message : 'Error inesperado al cargar centros.';
+    lastSyncAt.value = new Date();
   }
 }
 
@@ -366,6 +392,9 @@ onMounted(async () => {
   await nextTick();
   createMap();
   requestCurrentLocation();
+  refreshIntervalId = window.setInterval(() => {
+    void loadCenters();
+  }, 10000);
 });
 
 onBeforeUnmount(() => {
@@ -377,6 +406,10 @@ onBeforeUnmount(() => {
   mapInstance = null;
   centerLayerGroup = null;
   currentPositionLayer = null;
+
+  if (refreshIntervalId !== null) {
+    window.clearInterval(refreshIntervalId);
+  }
 });
 </script>
 

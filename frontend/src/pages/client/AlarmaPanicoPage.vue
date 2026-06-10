@@ -158,7 +158,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import Footer from '@/components/landing/Footer/Footer.vue';
 import PageHero from '@/components/common/PageHero.vue';
 import { apiUrl } from '@/utils/api';
-import { ensureSessionToken, type PanicAlert } from './public-sector';
+import { ensureSessionToken, toApiList, type PanicAlert } from './public-sector';
 
 const sessionToken = ref('');
 const selectedSymptom = ref('vision_borrosa');
@@ -312,12 +312,15 @@ function formatAlertDate(value: string): string {
 
 async function loadAlerts(): Promise<void> {
   try {
-    const response = await fetch(apiUrl(`/panic-alerts/?session_token=${sessionToken.value}`));
+    const response = await fetch(apiUrl(`/panic-alerts/?session_token=${sessionToken.value}`), {
+      cache: 'no-store',
+    });
     if (!response.ok) {
       throw new Error('No se pudieron cargar las alertas.');
     }
 
-    alerts.value = (await response.json()) as PanicAlert[];
+    const payload = (await response.json()) as unknown;
+    alerts.value = toApiList<PanicAlert>(payload);
   } catch {
     alerts.value = [];
   }

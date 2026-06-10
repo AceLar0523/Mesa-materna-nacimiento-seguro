@@ -151,7 +151,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import Footer from '@/components/landing/Footer/Footer.vue';
 import PageHero from '@/components/common/PageHero.vue';
 import { apiUrl } from '@/utils/api';
-import { ensureSessionToken, type AdolescentConsultation, PUBLIC_SECTOR_TOKEN_KEY } from './public-sector';
+import { ensureSessionToken, toApiList, type AdolescentConsultation, PUBLIC_SECTOR_TOKEN_KEY } from './public-sector';
 
 const sessionToken = ref('');
 const selectedTopic = ref<'contracepcion' | 'prevencion' | 'ciclo' | 'otro'>('contracepcion');
@@ -192,12 +192,15 @@ function statusClass(status: AdolescentConsultation['status']): string {
 
 async function refreshConsultations(): Promise<void> {
   try {
-    const response = await fetch(apiUrl(`/adolescent-consultations/?session_token=${sessionToken.value}`));
+    const response = await fetch(apiUrl(`/adolescent-consultations/?session_token=${sessionToken.value}`), {
+      cache: 'no-store',
+    });
     if (!response.ok) {
       throw new Error('No se pudieron cargar las consultas.');
     }
 
-    consultations.value = (await response.json()) as AdolescentConsultation[];
+    const payload = (await response.json()) as unknown;
+    consultations.value = toApiList<AdolescentConsultation>(payload);
   } catch {
     consultations.value = [];
   }

@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { apiUrl } from '@/utils/api';
-import { type HealthCenter, type PublicSectorLevel } from '../client/public-sector';
+import { toApiList, type HealthCenter, type PublicSectorLevel } from '../client/public-sector';
 
 type CenterForm = {
   nombre: string;
@@ -106,8 +106,17 @@ function populateForm(center: HealthCenter): void {
 }
 
 async function loadCenters(): Promise<void> {
-  const response = await fetch(apiUrl('/health-centers/'));
-  centers.value = response.ok ? ((await response.json()) as HealthCenter[]) : [];
+  const response = await fetch(apiUrl('/health-centers/'), {
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    centers.value = [];
+    return;
+  }
+
+  const payload = (await response.json()) as unknown;
+  centers.value = toApiList<HealthCenter>(payload);
 }
 
 async function saveCenter(): Promise<void> {

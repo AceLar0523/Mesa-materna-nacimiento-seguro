@@ -16,6 +16,13 @@
         </article>
       </div>
 
+      <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <p class="text-sm text-slate-500">Ultima sincronizacion: {{ lastSyncLabel }}</p>
+        <button type="button" class="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white" @click="loadAlerts">
+          Actualizar ahora
+        </button>
+      </div>
+
       <section class="grid gap-4">
         <article v-for="alert in alerts" :key="alert.id" class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-lg">
           <div class="flex flex-wrap items-start justify-between gap-4">
@@ -46,20 +53,45 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { apiUrl } from '@/utils/api';
-import { type PanicAlert, toNumber } from '../client/public-sector';
+import { toApiList, type PanicAlert, toNumber } from '../client/public-sector';
 
 const alerts = ref<PanicAlert[]>([]);
+const lastSyncAt = ref<Date | null>(null);
+let refreshIntervalId: number | null = null;
 const statuses = [
   { value: 'open', label: 'Abierta' },
   { value: 'acknowledged', label: 'Reconocida' },
   { value: 'closed', label: 'Cerrada' },
 ] as const;
 
+const lastSyncLabel = computed(() => {
+  if (!lastSyncAt.value) {
+    return 'sin sincronizar';
+  }
+
+  return lastSyncAt.value.toLocaleTimeString('es-BO', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+});
+
 async function loadAlerts(): Promise<void> {
-  const response = await fetch(apiUrl('/panic-alerts/'));
-  alerts.value = response.ok ? ((await response.json()) as PanicAlert[]) : [];
+  const response = await fetch(apiUrl('/panic-alerts/'), {
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    alerts.value = [];
+    lastSyncAt.value = new Date();
+    return;
+  }
+
+  const payload = (await response.json()) as unknown;
+  alerts.value = toApiList<PanicAlert>(payload);
+  lastSyncAt.value = new Date();
 }
 
 async function updateStatus(alertId: number, status: 'open' | 'acknowledged' | 'closed'): Promise<void> {
@@ -86,5 +118,14 @@ function toLabel(latitude: number | string, longitude: number | string): string 
 onMounted(async () => {
   document.title = 'Admin alertas | Mesa de Maternidad';
   await loadAlerts();
+  refreshIntervalId = window.setInterval(() => {
+    void loadAlerts();
+  }, 8000);
+});
+
+onBeforeUnmount(() => {
+  if (refreshIntervalId !== null) {
+    window.clearInterval(refreshIntervalId);
+  }
 });
 </script>

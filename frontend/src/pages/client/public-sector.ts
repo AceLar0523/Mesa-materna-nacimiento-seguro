@@ -46,6 +46,13 @@ export interface GeoPoint {
   longitude: number;
 }
 
+export interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
 export const PUBLIC_SECTOR_TOKEN_KEY = 'mesa-public-sector-token';
 
 export const moduleCards = [
@@ -126,4 +133,16 @@ export function formatLevel(level: PublicSectorLevel): string {
 
 export function toNumber(value: number | string): number {
   return typeof value === 'number' ? value : Number.parseFloat(value);
+}
+
+export function toApiList<T>(payload: unknown): T[] {
+  if (Array.isArray(payload)) {
+    return payload as T[];
+  }
+
+  if (payload && typeof payload === 'object' && Array.isArray((payload as PaginatedResponse<T>).results)) {
+    return (payload as PaginatedResponse<T>).results;
+  }
+
+  return [];
 }
