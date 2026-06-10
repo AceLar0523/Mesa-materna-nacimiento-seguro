@@ -1,21 +1,8 @@
 <template>
-  <div class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.16),_transparent_28%),linear-gradient(180deg,#effdfb_0%,#ffffff_54%,#fff7ed_100%)] pt-16 text-slate-900">
-    <header class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div class="flex flex-wrap items-center justify-between gap-4 rounded-[2rem] border border-teal-100 bg-white p-6 shadow-lg">
-        <div>
-          <p class="text-xs font-bold uppercase tracking-[0.35em] text-teal-600">Administración</p>
-          <h1 class="mt-2 text-3xl font-black">Centros de salud</h1>
-          <p class="mt-2 text-sm text-slate-600">Carga, edita y organiza hospitales y centros registrados para el geolocalizador público.</p>
-        </div>
-        <router-link to="/admin/sector-publico" class="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white">
-          Volver
-        </router-link>
-      </div>
-    </header>
-
-    <main class="mx-auto grid max-w-7xl gap-8 px-4 pb-12 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-      <section class="rounded-[2rem] border border-teal-100 bg-white p-6 shadow-lg">
-        <div class="flex items-center justify-between gap-4">
+  <div class="space-y-6">
+    <main class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+      <section class="rounded-3xl border border-teal-100 bg-white p-6 shadow-sm">
+        <div class="flex items-center justify-between gap-4 mb-6">
           <div>
             <p class="text-xs font-bold uppercase tracking-[0.25em] text-teal-600">Formulario</p>
             <h2 class="mt-2 text-2xl font-black">{{ editingId ? 'Editar centro' : 'Nuevo centro' }}</h2>
@@ -23,7 +10,7 @@
           <button class="rounded-full bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700" type="button" @click="resetForm">Limpiar</button>
         </div>
 
-        <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="saveCenter">
+        <form class="grid gap-4 md:grid-cols-2" @submit.prevent="saveCenter">
           <label class="space-y-2 md:col-span-2"><span class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Nombre</span><input v-model="form.nombre" class="input-base" type="text" required /></label>
           <label class="space-y-2"><span class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Nivel</span><select v-model="form.nivel" class="input-base"><option value="I">Nivel I</option><option value="II">Nivel II</option><option value="III">Nivel III</option></select></label>
           <label class="space-y-2"><span class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Ciudad</span><input v-model="form.ciudad" class="input-base" type="text" required /></label>

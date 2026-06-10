@@ -34,6 +34,7 @@ import SectorPublicoAdminHome from '@/pages/admin/SectorPublicoAdminHome.vue';
 import AdminCentrosSaludPage from '@/pages/admin/AdminCentrosSaludPage.vue';
 import AdminAlertasPanicoPage from '@/pages/admin/AdminAlertasPanicoPage.vue';
 import AdminConsultasAdolescentesPage from '@/pages/admin/AdminConsultasAdolescentesPage.vue';
+import PublicSectorAdminPage from '@/pages/admin/PublicSectorAdminPage.vue';
 import UnfpaBoliviaPage from '@/pages/UnfpaBoliviaPage.vue';
 import RepresentantePage from '@/pages/RepresentantePage.vue';
 import UnfpaLacPage from '@/pages/UnfpaLacPage.vue';
@@ -105,6 +106,36 @@ const router = createRouter({
           path: 'configuracion',
           name: 'admin-configuracion',
           component: ConfiguracionAdminPage
+        },
+        {
+          path: 'sector-publico',
+          children: [
+            {
+              path: '',
+              name: 'PublicSectorAdminHome',
+              component: SectorPublicoAdminHome
+            },
+            {
+              path: 'panel-operativo',
+              name: 'PublicSectorAdmin',
+              component: PublicSectorAdminPage
+            },
+            {
+              path: 'centros',
+              name: 'AdminCentrosSalud',
+              component: AdminCentrosSaludPage
+            },
+            {
+              path: 'alertas',
+              name: 'AdminAlertasPanico',
+              component: AdminAlertasPanicoPage
+            },
+            {
+              path: 'consultas',
+              name: 'AdminConsultasAdolescentes',
+              component: AdminConsultasAdolescentesPage
+            }
+          ]
         }
       ]
     },
@@ -227,30 +258,6 @@ const router = createRouter({
       path: '/sector-publico/salud-adolescente',
       name: 'SaludAdolescente',
       component: SaludAdolescentePage
-    },
-    {
-      path: '/admin/sector-publico',
-      name: 'PublicSectorAdmin',
-      meta: { hideHeader: true },
-      component: SectorPublicoAdminHome
-    },
-    {
-      path: '/admin/sector-publico/centros',
-      name: 'AdminCentrosSalud',
-      meta: { hideHeader: true },
-      component: AdminCentrosSaludPage
-    },
-    {
-      path: '/admin/sector-publico/alertas',
-      name: 'AdminAlertasPanico',
-      meta: { hideHeader: true },
-      component: AdminAlertasPanicoPage
-    },
-    {
-      path: '/admin/sector-publico/consultas',
-      name: 'AdminConsultasAdolescentes',
-      meta: { hideHeader: true },
-      component: AdminConsultasAdolescentesPage
     },
     {
       path: '/:category/:subcategory',

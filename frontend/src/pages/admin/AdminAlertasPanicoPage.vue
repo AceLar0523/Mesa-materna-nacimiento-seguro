@@ -1,28 +1,29 @@
 <template>
-  <div class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(239,68,68,0.18),_transparent_28%),linear-gradient(180deg,#fff7ed_0%,#ffffff_54%,#fff1f2_100%)] pt-16 text-slate-900">
-    <header class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div class="flex flex-wrap items-center justify-between gap-4 rounded-[2rem] border border-rose-100 bg-white p-6 shadow-lg">
-        <div>
-          <p class="text-xs font-bold uppercase tracking-[0.35em] text-rose-600">Administración</p>
-          <h1 class="mt-2 text-3xl font-black">Alertas de pánico</h1>
-          <p class="mt-2 text-sm text-slate-600">Revisa alertas activas, cambia su estado y da seguimiento a cada envío anónimo.</p>
-        </div>
-        <router-link to="/admin/sector-publico" class="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white">Volver</router-link>
-      </div>
-    </header>
-
-    <main class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+  <div class="space-y-6">
+    <main class="grid gap-6">
       <div class="grid gap-4 md:grid-cols-3">
-        <article class="rounded-[1.75rem] border border-rose-100 bg-white p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-[0.25em] text-rose-500">Totales</p><h2 class="mt-2 text-4xl font-black">{{ alerts.length }}</h2></article>
-        <article class="rounded-[1.75rem] border border-orange-100 bg-white p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-[0.25em] text-orange-500">Abiertas</p><h2 class="mt-2 text-4xl font-black">{{ countByStatus('open') }}</h2></article>
-        <article class="rounded-[1.75rem] border border-emerald-100 bg-white p-5 shadow-sm"><p class="text-xs font-bold uppercase tracking-[0.25em] text-emerald-500">Cerradas</p><h2 class="mt-2 text-4xl font-black">{{ countByStatus('closed') }}</h2></article>
+        <article class="rounded-3xl border border-rose-100 bg-white p-5 shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-rose-500">Totales</p>
+          <h2 class="mt-2 text-4xl font-black">{{ alerts.length }}</h2>
+        </article>
+        <article class="rounded-3xl border border-orange-100 bg-white p-5 shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-orange-500">Abiertas</p>
+          <h2 class="mt-2 text-4xl font-black">{{ countByStatus('open') }}</h2>
+        </article>
+        <article class="rounded-3xl border border-emerald-100 bg-white p-5 shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-emerald-500">Cerradas</p>
+          <h2 class="mt-2 text-4xl font-black">{{ countByStatus('closed') }}</h2>
+        </article>
       </div>
 
-      <section class="mt-8 grid gap-4">
+      <section class="grid gap-4">
         <article v-for="alert in alerts" :key="alert.id" class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-lg">
           <div class="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <div class="flex items-center gap-2"><span class="rounded-full bg-rose-50 px-3 py-1 text-xs font-bold text-rose-700">{{ alert.status }}</span><h3 class="font-black text-slate-900">{{ alert.symptom || 'Sin síntoma' }}</h3></div>
+              <div class="flex items-center gap-2">
+                <span class="rounded-full bg-rose-50 px-3 py-1 text-xs font-bold text-rose-700">{{ alert.status }}</span>
+                <h3 class="font-black text-slate-900">{{ alert.symptom || 'Sin síntoma' }}</h3>
+              </div>
               <p class="mt-2 text-sm text-slate-600">{{ formatDate(alert.created_at) }}</p>
               <p class="mt-1 text-xs text-slate-500">{{ toLabel(alert.latitude, alert.longitude) }}</p>
             </div>
@@ -31,6 +32,14 @@
             </div>
           </div>
         </article>
+
+        <div v-if="alerts.length === 0" class="rounded-[2rem] border border-dashed border-rose-200 bg-white px-6 py-12 text-center shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-rose-500">Sin alertas registradas</p>
+          <h3 class="mt-3 text-2xl font-black text-slate-900">Todavia no llegaron alertas de panico</h3>
+          <p class="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+            Cuando una usuaria use el boton de panico desde la vista publica, las alertas apareceran aqui con su estado y ubicacion.
+          </p>
+        </div>
       </section>
     </main>
   </div>

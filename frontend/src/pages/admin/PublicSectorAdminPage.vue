@@ -1,19 +1,9 @@
 <template>
-  <div class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(15,118,110,0.16),_transparent_28%),linear-gradient(180deg,#0f172a_0%,#ffffff_54%,#fff7ed_100%)] pt-16 text-slate-900">
-    <header class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <div class="rounded-[2rem] border border-white/20 bg-slate-950 p-8 text-white shadow-[0_30px_90px_-40px_rgba(15,23,42,0.95)]">
-        <p class="text-xs font-bold uppercase tracking-[0.35em] text-teal-200">Admin público</p>
-        <h1 class="mt-3 text-3xl font-black md:text-5xl">Panel de operación del sector público</h1>
-        <p class="mt-4 max-w-3xl text-sm leading-6 text-slate-300 md:text-base">
-          Desde aquí se crean los centros de salud, se monitorean alertas de pánico y se responden consultas anónimas de adolescentes.
-        </p>
-      </div>
-    </header>
-
-    <main class="mx-auto grid max-w-7xl gap-8 px-4 pb-12 sm:px-6 lg:px-8 xl:grid-cols-[1fr_1fr]">
-      <section class="space-y-8">
-        <div class="rounded-[2rem] border border-teal-100 bg-white p-6 shadow-lg">
-          <div class="flex items-center justify-between gap-4">
+  <div class="space-y-6">
+    <main class="grid gap-6 lg:grid-cols-2">
+      <section class="space-y-6">
+        <div class="rounded-3xl border border-teal-100 bg-white p-6 shadow-sm">
+          <div class="flex items-center justify-between gap-4 mb-6">
             <div>
               <p class="text-xs font-bold uppercase tracking-[0.25em] text-teal-600">Centros de salud</p>
               <h2 class="mt-2 text-2xl font-black text-slate-900">Crear o editar centros</h2>
@@ -23,7 +13,7 @@
             </button>
           </div>
 
-          <form class="mt-6 grid gap-4 md:grid-cols-2" @submit.prevent="saveCenter">
+          <form class="grid gap-4 md:grid-cols-2" @submit.prevent="saveCenter">
             <label class="space-y-2 md:col-span-2">
               <span class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Nombre</span>
               <input v-model="centerForm.nombre" class="input-base" type="text" required />

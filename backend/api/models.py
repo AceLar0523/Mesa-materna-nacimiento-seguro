@@ -61,12 +61,16 @@ class BlogPost(models.Model):
     CATEGORIA_TESTIMONIO = 'Testimonio'
     CATEGORIA_OPINION = 'Opinion'
     CATEGORIA_DUDA = 'Duda'
+    CATEGORIA_NOTICIA = 'Noticia'
+    CATEGORIA_PUBLICACION = 'Publicacion'
 
     CATEGORIAS = [
         (CATEGORIA_RECOMENDACION, 'Recomendacion Medica'),
         (CATEGORIA_TESTIMONIO, 'Testimonio de Vida'),
         (CATEGORIA_OPINION, 'Opinion'),
         (CATEGORIA_DUDA, 'Duda / Consulta'),
+        (CATEGORIA_NOTICIA, 'Noticia'),
+        (CATEGORIA_PUBLICACION, 'Publicacion'),
     ]
 
     autor = models.CharField(max_length=120, default='Anonimo')

@@ -1,21 +1,11 @@
 <template>
-  <div class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(15,118,110,0.16),_transparent_28%),linear-gradient(180deg,#0f172a_0%,#ffffff_54%,#fff7ed_100%)] pt-16 text-slate-900">
-    <header class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <div class="rounded-[2rem] border border-white/20 bg-slate-950 p-8 text-white shadow-[0_30px_90px_-40px_rgba(15,23,42,0.95)]">
-        <p class="text-xs font-bold uppercase tracking-[0.35em] text-teal-200">Admin público</p>
-        <h1 class="mt-3 text-3xl font-black md:text-5xl">Administración del sector público</h1>
-        <p class="mt-4 max-w-3xl text-sm leading-6 text-slate-300 md:text-base">
-          Cada módulo con operación administrativa propia. Entra directo al que necesites sin mezclar flujos en una sola vista.
-        </p>
-      </div>
-    </header>
-
-    <main class="mx-auto grid max-w-7xl gap-6 px-4 pb-12 sm:px-6 lg:grid-cols-3 lg:px-8">
+  <div class="space-y-6 p-1">
+    <main class="grid gap-6 lg:grid-cols-3">
       <router-link
         v-for="module in modules"
         :key="module.to"
         :to="module.to"
-        class="group rounded-[2rem] border border-slate-200 bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
+        class="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
       >
         <div class="flex items-center justify-between gap-4">
           <div class="flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-sm" :class="module.accent">
@@ -39,7 +29,15 @@ import { onMounted } from 'vue';
 
 const modules = [
   {
-    to: '/admin/sector-publico/centros',
+    to: '/dashboard/sector-publico/panel-operativo',
+    title: 'Panel Maestro',
+    badge: 'Nuevo',
+    icon: 'pi pi-desktop',
+    accent: 'bg-gradient-to-br from-[#1e293b] to-[#334155]',
+    description: 'Vista consolidada de centros, alertas y consultas en una sola pantalla operativa.'
+  },
+  {
+    to: '/dashboard/sector-publico/centros',
     title: 'Centros de salud',
     badge: 'Alta',
     icon: 'pi pi-map-marker',
@@ -47,7 +45,7 @@ const modules = [
     description: 'Crear y actualizar hospitales, hospitales municipales y centros integrales de salud.'
   },
   {
-    to: '/admin/sector-publico/alertas',
+    to: '/dashboard/sector-publico/alertas',
     title: 'Alertas de pánico',
     badge: 'Crítica',
     icon: 'pi pi-bell',
@@ -55,7 +53,7 @@ const modules = [
     description: 'Monitorear alertas activas, reconocerlas y cerrar su ciclo operativo.'
   },
   {
-    to: '/admin/sector-publico/consultas',
+    to: '/dashboard/sector-publico/consultas',
     title: 'Consultas adolescentes',
     badge: 'Moderación',
     icon: 'pi pi-comments',

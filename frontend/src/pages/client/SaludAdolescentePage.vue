@@ -103,26 +103,27 @@
           </div>
 
           <div class="mt-5 space-y-4">
-            <article
-              v-for="consultation in consultations"
-              :key="consultation.id"
-              class="rounded-[1.5rem] border p-4 transition hover:-translate-y-0.5"
-              :class="consultation.status === 'answered' ? 'border-emerald-100 bg-emerald-50/60' : 'border-slate-100 bg-slate-50'"
-            >
-              <div class="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">{{ topicLabel(consultation.topic) }}</p>
-                  <h4 class="mt-1 font-black text-slate-900">{{ consultation.question }}</h4>
+            <template v-for="consultation in consultations" :key="consultation?.id">
+              <article
+                v-if="consultation"
+                class="rounded-[1.5rem] border p-4 transition hover:-translate-y-0.5"
+                :class="consultation.status === 'answered' ? 'border-emerald-100 bg-emerald-50/60' : 'border-slate-100 bg-slate-50'"
+              >
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">{{ topicLabel(consultation.topic) }}</p>
+                    <h4 class="mt-1 font-black text-slate-900">{{ consultation.question }}</h4>
+                  </div>
+                  <span class="rounded-full px-3 py-1 text-xs font-bold" :class="statusClass(consultation.status)">{{ statusLabel(consultation.status) }}</span>
                 </div>
-                <span class="rounded-full px-3 py-1 text-xs font-bold" :class="statusClass(consultation.status)">{{ statusLabel(consultation.status) }}</span>
-              </div>
 
-              <div class="mt-4 rounded-2xl bg-white p-4 text-sm text-slate-700 shadow-sm">
-                <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Respuesta</p>
-                <p class="mt-2 whitespace-pre-line">{{ consultation.answer || 'Todavía no hay respuesta del moderador.' }}</p>
-                <p v-if="consultation.responder_name" class="mt-2 text-xs text-slate-500">Atendió: {{ consultation.responder_name }}</p>
-              </div>
-            </article>
+                <div class="mt-4 rounded-2xl bg-white p-4 text-sm text-slate-700 shadow-sm">
+                  <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-400">Respuesta</p>
+                  <p class="mt-2 whitespace-pre-line">{{ consultation.answer || 'Todavía no hay respuesta del moderador.' }}</p>
+                  <p v-if="consultation.responder_name" class="mt-2 text-xs text-slate-500">Atendió: {{ consultation.responder_name }}</p>
+                </div>
+              </article>
+            </template>
 
             <p v-if="consultations.length === 0" class="rounded-[1.5rem] border border-dashed border-slate-200 p-4 text-sm text-slate-500">
               Aún no tienes consultas enviadas desde este navegador.
@@ -169,6 +170,7 @@ const topicChips = [
 const sessionTokenPreview = computed(() => (sessionToken.value ? `${sessionToken.value.slice(0, 8)}…${sessionToken.value.slice(-6)}` : 'sin acceso'));
 
 function topicLabel(topic: AdolescentConsultation['topic']): string {
+  if (!topic) return 'Consulta';
   if (topic === 'contracepcion') return 'Anticoncepción';
   if (topic === 'prevencion') return 'Prevención';
   if (topic === 'ciclo') return 'Ciclo menstrual';
@@ -176,6 +178,7 @@ function topicLabel(topic: AdolescentConsultation['topic']): string {
 }
 
 function statusLabel(status: AdolescentConsultation['status']): string {
+  if (!status) return 'Pendiente';
   if (status === 'answered') return 'Respondida';
   if (status === 'closed') return 'Cerrada';
   return 'Pendiente';

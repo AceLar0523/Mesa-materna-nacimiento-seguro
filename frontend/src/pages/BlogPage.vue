@@ -142,7 +142,7 @@ import PageHero from '@/components/common/PageHero.vue';
 import Footer from '../components/landing/Footer/Footer.vue';
 import { apiUrl } from '@/utils/api';
 
-type CategoriaBlog = 'Recomendacion' | 'Testimonio' | 'Opinion' | 'Duda';
+type CategoriaBlog = 'Recomendacion' | 'Testimonio' | 'Opinion' | 'Duda' | 'Noticia' | 'Publicacion';
 
 interface BlogPostApi {
   id: number;
@@ -183,6 +183,8 @@ const posts = ref<BlogPostUI[]>([]);
 const categoriaLabel = (categoria: CategoriaBlog): string => {
   if (categoria === 'Recomendacion') return 'Recomendación';
   if (categoria === 'Opinion') return 'Opinión';
+  if (categoria === 'Noticia') return 'Noticia';
+  if (categoria === 'Publicacion') return 'Publicación';
   return categoria;
 };
 

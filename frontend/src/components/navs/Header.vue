@@ -90,7 +90,8 @@ const navLinks = [
   { name: 'Últimas Noticias', path: '/noticias' },
   { name: 'Datos', path: '/datos' },
   { name: 'Instituciones', path: '/instituciones' },
-  { name: 'Contáctanos', path: '/contactanos' }
+  { name: 'Contáctanos', path: '/contactanos' },
+  { name: 'Sector Público', path: '/sector-publico/asistente-obstetrico' }
 ];
 
 const toggleDrawer = () => { isDrawerOpen.value = !isDrawerOpen.value; };

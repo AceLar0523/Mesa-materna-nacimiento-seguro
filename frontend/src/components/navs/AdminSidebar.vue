@@ -52,6 +52,23 @@
         </router-link>
       </div>
 
+      <!-- Sector Público -->
+      <div class="admin-nav-section">
+        <p class="admin-nav-section-title">Sector Público</p>
+        <router-link
+          v-for="item in publicSectorNav"
+          :key="item.to"
+          :to="item.to"
+          class="admin-nav-item"
+          :class="{ active: isActive(item.to) }"
+          @click="$emit('close')"
+        >
+          <i :class="item.icon"></i>
+          <span>{{ item.label }}</span>
+          <span v-if="item.badge" class="nav-badge">{{ item.badge }}</span>
+        </router-link>
+      </div>
+
       <!-- Sistema -->
       <div class="admin-nav-section">
         <p class="admin-nav-section-title">Sistema</p>
@@ -111,6 +128,14 @@ const contentNav = [
   { label: 'Publicaciones', icon: 'pi pi-book', to: '/dashboard/publicaciones', badge: null },
   { label: 'Multimedia', icon: 'pi pi-images', to: '/dashboard/multimedia', badge: null },
   { label: 'Instituciones', icon: 'pi pi-building', to: '/dashboard/instituciones', badge: null },
+];
+
+const publicSectorNav = [
+  { label: 'Inicio Sector Público', icon: 'pi pi-home', to: '/dashboard/sector-publico', badge: null },
+  { label: 'Panel Operativo', icon: 'pi pi-th-large', to: '/dashboard/sector-publico/panel-operativo', badge: null },
+  { label: 'Centros de Salud', icon: 'pi pi-map-marker', to: '/dashboard/sector-publico/centros', badge: null },
+  { label: 'Alertas de Pánico', icon: 'pi pi-bell', to: '/dashboard/sector-publico/alertas', badge: 'New' },
+  { label: 'Consultas Jóvenes', icon: 'pi pi-comments', to: '/dashboard/sector-publico/consultas', badge: '5' },
 ];
 
 const systemNav = [

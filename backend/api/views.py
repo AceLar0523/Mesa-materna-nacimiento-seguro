@@ -4,7 +4,8 @@ import time
 from django.http import StreamingHttpResponse
 from django.utils import timezone
 from rest_framework import status, viewsets
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from .models import AdolescentConsultation, BlogPost, ContactMessage, HealthCenter, PanicAlert, RegistroMaternal
@@ -27,7 +28,8 @@ class RegistroViewSet(viewsets.ModelViewSet):
 class BlogPostViewSet(viewsets.ModelViewSet):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
-    http_method_names = ['get', 'post', 'patch', 'head', 'options']
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):
@@ -39,12 +41,14 @@ class BlogPostViewSet(viewsets.ModelViewSet):
 class ContactMessageViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
-    http_method_names = ['get', 'post', 'head', 'options']
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'delete', 'head', 'options']
 
 
 class HealthCenterViewSet(viewsets.ModelViewSet):
     queryset = HealthCenter.objects.all()
     serializer_class = HealthCenterSerializer
+    permission_classes = [AllowAny]
     http_method_names = ['get', 'post', 'patch', 'head', 'options']
 
     def get_queryset(self):
@@ -58,6 +62,7 @@ class HealthCenterViewSet(viewsets.ModelViewSet):
 class PanicAlertViewSet(viewsets.ModelViewSet):
     queryset = PanicAlert.objects.all()
     serializer_class = PanicAlertSerializer
+    permission_classes = [AllowAny]
     http_method_names = ['get', 'post', 'patch', 'head', 'options']
 
     def get_queryset(self):
@@ -71,6 +76,7 @@ class PanicAlertViewSet(viewsets.ModelViewSet):
 class AdolescentConsultationViewSet(viewsets.ModelViewSet):
     queryset = AdolescentConsultation.objects.all()
     serializer_class = AdolescentConsultationSerializer
+    permission_classes = [AllowAny]
     http_method_names = ['get', 'post', 'patch', 'head', 'options']
 
     def get_queryset(self):
@@ -87,6 +93,7 @@ class AdolescentConsultationViewSet(viewsets.ModelViewSet):
         return queryset
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def blog_stream(request):
     def event_stream():
         last_seen = None
@@ -112,6 +119,7 @@ def blog_stream(request):
 
 # --- NUEVA VISTA PARA EL CHATBOT ---
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def chat_materna(request):
     mensaje_usuario = request.data.get('mensaje')
     
