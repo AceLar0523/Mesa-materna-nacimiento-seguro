@@ -56,6 +56,7 @@ const pageMeta: Record<string, { title: string; description: string }> = {
   '/dashboard/sector-publico/centros': { title: 'Centros de Salud', description: 'Gestión de establecimientos médicos' },
   '/dashboard/sector-publico/alertas': { title: 'Alertas de Pánico', description: 'Monitoreo de señales de emergencia' },
   '/dashboard/sector-publico/consultas': { title: 'Consultas Jóvenes', description: 'Moderación de dudas anónimas' },
+  '/dashboard/sector-publico/near-miss': { title: 'Registro Near-Miss', description: 'Morbilidad Materna Extrema' },
 };
 
 const pageTitle = computed(() => {

@@ -1,109 +1,133 @@
 <template>
-  <div class="admin-page">
-    <div class="admin-page-header">
-      <div>
-        <h1 class="admin-page-title">Morbilidad Materna Extrema (Near-Miss)</h1>
-        <p class="admin-page-subtitle">Registro y análisis bajo el enfoque de las "3 Demoras"</p>
+  <div class="space-y-6">
+    <main class="grid gap-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-black text-slate-900">Morbilidad Materna Extrema</h1>
+          <p class="text-sm text-slate-500 mt-1">Registro y análisis bajo el enfoque de las "3 Demoras"</p>
+        </div>
+        <button type="button" class="rounded-full bg-[#EC4899] px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-[#BE185D] flex items-center gap-2" @click="openNewModal">
+          <i class="pi pi-plus font-bold"></i>
+          Nuevo Registro
+        </button>
       </div>
-      <button class="btn btn-primary" @click="openNewModal">
-        <i class="pi pi-plus"></i> Nuevo Registro
-      </button>
-    </div>
 
-    <!-- Data Table -->
-    <div class="admin-card">
-      <div v-if="loading" class="loading-state">
-        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-        <p>Cargando registros...</p>
+      <div class="grid gap-4 md:grid-cols-3">
+        <article class="rounded-3xl border border-pink-100 bg-white p-5 shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-pink-500">Total Casos</p>
+          <h2 class="mt-2 text-4xl font-black text-slate-900">{{ records.length }}</h2>
+        </article>
+        <article class="rounded-3xl border border-emerald-100 bg-white p-5 shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-emerald-500">Sobrevivientes</p>
+          <h2 class="mt-2 text-4xl font-black text-slate-900">{{ countByStatus('survived') }}</h2>
+        </article>
+        <article class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Fallecidas</p>
+          <h2 class="mt-2 text-4xl font-black text-slate-900">{{ countByStatus('deceased') }}</h2>
+        </article>
       </div>
-      <div v-else-if="records.length === 0" class="empty-state">
-        <i class="pi pi-folder-open"></i>
-        <p>No hay registros de Near-Miss aún.</p>
-        <button class="btn btn-outline" @click="openNewModal">Crear el primero</button>
-      </div>
-      <div v-else class="table-responsive">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Condición</th>
-              <th>Edad (Sem)</th>
-              <th>Demoras Identificadas</th>
-              <th>Estado</th>
-              <th>Fecha</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="record in records" :key="record.id">
-              <td>#{{ record.id }}</td>
-              <td>{{ getConditionLabel(record.condition) }}</td>
-              <td>{{ record.patient_age }} ({{ record.gestational_age }} sem)</td>
-              <td>
-                <div class="delay-badges">
-                  <span class="badge" :class="record.delay_1_decision ? 'badge-danger' : 'badge-success'" title="Demora 1: Decisión">D1</span>
-                  <span class="badge" :class="record.delay_2_transport ? 'badge-danger' : 'badge-success'" title="Demora 2: Transporte">D2</span>
-                  <span class="badge" :class="record.delay_3_care ? 'badge-danger' : 'badge-success'" title="Demora 3: Atención">D3</span>
-                </div>
-              </td>
-              <td>
-                <span class="status-badge" :class="record.survival_status === 'survived' ? 'success' : 'danger'">
+
+      <section class="grid gap-4">
+        <div v-if="loading" class="flex flex-col items-center justify-center py-12 text-pink-500">
+          <i class="pi pi-spin pi-spinner text-4xl mb-4"></i>
+          <p class="font-bold text-slate-600">Cargando registros...</p>
+        </div>
+
+        <article v-else-if="records.length === 0" class="rounded-[2rem] border border-dashed border-pink-200 bg-white px-6 py-12 text-center shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-pink-500">Sin Registros</p>
+          <h3 class="mt-3 text-2xl font-black text-slate-900">No hay casos Near-Miss registrados</h3>
+          <p class="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+            Comienza agregando el primer registro clínico para llevar el análisis epidemiológico de morbilidad materna extrema.
+          </p>
+          <button class="mt-6 rounded-full bg-pink-50 px-6 py-2 font-bold text-pink-600 transition hover:bg-pink-100" @click="openNewModal">
+            Agregar el primer caso
+          </button>
+        </article>
+
+        <article v-else v-for="record in records" :key="record.id" class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-3">
+                <span class="rounded-full px-3 py-1 text-xs font-bold" :class="record.survival_status === 'survived' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-700'">
                   {{ record.survival_status === 'survived' ? 'Sobrevivió' : 'Falleció' }}
                 </span>
-              </td>
-              <td>{{ formatDate(record.created_at) }}</td>
-              <td>
-                <div class="action-buttons">
-                  <button class="btn-icon text-primary" @click="viewRecord(record)" title="Ver detalles">
-                    <i class="pi pi-eye"></i>
-                  </button>
-                  <button class="btn-icon text-danger" @click="confirmDelete(record.id)" title="Eliminar">
-                    <i class="pi pi-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Modal Formulario Near-Miss -->
-    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-      <div class="modal-content large-modal">
-        <div class="modal-header">
-          <h2>{{ isEditing ? 'Ver/Editar Registro Near-Miss' : 'Nuevo Registro Near-Miss' }}</h2>
-          <button class="modal-close" @click="closeModal"><i class="pi pi-times"></i></button>
-        </div>
-        
-        <form @submit.prevent="saveRecord" class="modal-body">
-          <!-- Paciente y Condición -->
-          <div class="form-section">
-            <h3 class="section-title"><i class="pi pi-user"></i> Datos Clínicos Básicos</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Edad de la Paciente</label>
-                <input type="number" v-model="formData.patient_age" required min="10" max="60" class="form-control" />
+                <h3 class="font-black text-slate-900 text-lg">{{ getConditionLabel(record.condition) }}</h3>
               </div>
-              <div class="form-group">
-                <label>Edad Gestacional (Semanas)</label>
-                <input type="number" v-model="formData.gestational_age" required min="0" max="42" class="form-control" />
+              <p class="mt-2 text-sm text-slate-600 font-medium">Paciente de {{ record.patient_age }} años ({{ record.gestational_age }} sem. de gestación)</p>
+              <p class="mt-1 text-xs text-slate-400">Registrado el {{ formatDate(record.created_at) }}</p>
+            </div>
+
+            <div class="flex gap-2">
+              <button class="rounded-full bg-slate-50 p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900" title="Ver/Editar" @click="viewRecord(record)">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button class="rounded-full bg-rose-50 p-2 text-rose-500 transition hover:bg-rose-100 hover:text-rose-700" title="Eliminar" @click="confirmDelete(record.id)">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-6 border-t border-slate-100 pt-4">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Análisis de 3 Demoras</p>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="rounded-xl p-3 border" :class="record.delay_1_decision ? 'bg-orange-50 border-orange-200 text-orange-800' : 'bg-slate-50 border-slate-100 text-slate-400'">
+                <p class="text-xs font-bold mb-1">D1: Decisión</p>
+                <p class="text-[0.7rem] line-clamp-2 leading-snug">{{ record.delay_1_decision ? (record.delay_1_details || 'Demora identificada') : 'Sin demora' }}</p>
+              </div>
+              <div class="rounded-xl p-3 border" :class="record.delay_2_transport ? 'bg-orange-50 border-orange-200 text-orange-800' : 'bg-slate-50 border-slate-100 text-slate-400'">
+                <p class="text-xs font-bold mb-1">D2: Transporte</p>
+                <p class="text-[0.7rem] line-clamp-2 leading-snug">{{ record.delay_2_transport ? (record.delay_2_details || 'Demora identificada') : 'Sin demora' }}</p>
+              </div>
+              <div class="rounded-xl p-3 border" :class="record.delay_3_care ? 'bg-orange-50 border-orange-200 text-orange-800' : 'bg-slate-50 border-slate-100 text-slate-400'">
+                <p class="text-xs font-bold mb-1">D3: Atención</p>
+                <p class="text-[0.7rem] line-clamp-2 leading-snug">{{ record.delay_3_care ? (record.delay_3_details || 'Demora identificada') : 'Sin demora' }}</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- Modal Form -->
+    <div v-if="showModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 overflow-y-auto" @click.self="closeModal">
+      <div class="w-full max-w-3xl rounded-[2rem] bg-white shadow-2xl overflow-hidden my-8">
+        <div class="flex items-center justify-between border-b border-slate-100 px-8 py-5 bg-slate-50/50">
+          <h2 class="text-xl font-black text-slate-900">{{ isEditing ? 'Editar Registro Clínico' : 'Nuevo Registro Near-Miss' }}</h2>
+          <button class="text-slate-400 transition hover:text-rose-500" @click="closeModal">
+            <i class="pi pi-times text-xl"></i>
+          </button>
+        </div>
+
+        <form @submit.prevent="saveRecord" class="px-8 py-6 space-y-8 max-h-[70vh] overflow-y-auto">
+          
+          <div class="space-y-4">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-pink-500 flex items-center gap-2">
+              <i class="pi pi-user"></i> Datos Clínicos
+            </h3>
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Edad de la Paciente</label>
+                <input type="number" v-model="formData.patient_age" required min="10" max="60" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium focus:border-pink-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-pink-500" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Edad Gestacional (Sem)</label>
+                <input type="number" v-model="formData.gestational_age" required min="0" max="42" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium focus:border-pink-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-pink-500" />
               </div>
             </div>
             
-            <div class="form-row">
-              <div class="form-group">
-                <label>Condición Principal (Complicación Severa)</label>
-                <select v-model="formData.condition" required class="form-control">
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Condición Principal</label>
+                <select v-model="formData.condition" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium focus:border-pink-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-pink-500">
                   <option value="hemorrhage">Hemorragia severa</option>
                   <option value="hypertension">Trastorno hipertensivo severo (Preeclampsia/Eclampsia)</option>
                   <option value="sepsis">Infección sistémica severa / Sepsis</option>
                   <option value="other">Otra complicación severa</option>
                 </select>
               </div>
-              <div class="form-group">
-                <label>Estado de Supervivencia</label>
-                <select v-model="formData.survival_status" required class="form-control">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Supervivencia</label>
+                <select v-model="formData.survival_status" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium focus:border-pink-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-pink-500">
                   <option value="survived">Sobrevivió</option>
                   <option value="deceased">Falleció</option>
                 </select>
@@ -111,89 +135,73 @@
             </div>
           </div>
 
-          <!-- Análisis de las 3 Demoras -->
-          <div class="form-section highlight-section">
-            <h3 class="section-title"><i class="pi pi-exclamation-triangle"></i> Análisis: Las 3 Demoras</h3>
-            <p class="section-desc">Identifique en qué punto(s) se produjo un retraso crítico.</p>
-            
-            <!-- Demora 1 -->
-            <div class="delay-card" :class="{ 'active-delay': formData.delay_1_decision }">
-              <div class="delay-header">
-                <label class="toggle-switch">
-                  <input type="checkbox" v-model="formData.delay_1_decision">
-                  <span class="slider round"></span>
-                </label>
-                <div class="delay-title">
-                  <h4>Demora 1: Decisión</h4>
-                  <span>Retraso en tomar la decisión de buscar atención médica.</span>
-                </div>
-              </div>
-              <div v-if="formData.delay_1_decision" class="delay-body">
-                <label>Detalles de la Demora 1</label>
-                <textarea v-model="formData.delay_1_details" rows="2" class="form-control" placeholder="Ej. Falta de conocimiento de señales de peligro, barreras socioculturales, miedo..."></textarea>
-              </div>
+          <div class="space-y-4 rounded-2xl bg-orange-50/50 p-6 border border-orange-100">
+            <div class="mb-2">
+              <h3 class="text-sm font-bold uppercase tracking-wider text-orange-600 flex items-center gap-2">
+                <i class="pi pi-exclamation-triangle"></i> Análisis: Las 3 Demoras
+              </h3>
+              <p class="text-xs text-orange-600/70 mt-1">Identifique los cuellos de botella críticos en la atención</p>
             </div>
 
-            <!-- Demora 2 -->
-            <div class="delay-card" :class="{ 'active-delay': formData.delay_2_transport }">
-              <div class="delay-header">
-                <label class="toggle-switch">
-                  <input type="checkbox" v-model="formData.delay_2_transport">
-                  <span class="slider round"></span>
+            <div class="space-y-3">
+              <div class="rounded-xl border bg-white p-4 transition-colors" :class="formData.delay_1_decision ? 'border-orange-300 shadow-sm' : 'border-slate-200'">
+                <label class="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" v-model="formData.delay_1_decision" class="mt-1 h-4 w-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500" />
+                  <div class="flex-1">
+                    <span class="block text-sm font-bold text-slate-900">Demora 1: Decisión de buscar ayuda</span>
+                    <span class="block text-xs text-slate-500 mb-2">Falta de conocimiento, factores culturales, económicos.</span>
+                    <textarea v-if="formData.delay_1_decision" v-model="formData.delay_1_details" rows="2" class="w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm focus:border-orange-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-orange-500" placeholder="Detalles de la demora..."></textarea>
+                  </div>
                 </label>
-                <div class="delay-title">
-                  <h4>Demora 2: Transporte</h4>
-                  <span>Retraso en llegar a una instalación de salud adecuada.</span>
-                </div>
               </div>
-              <div v-if="formData.delay_2_transport" class="delay-body">
-                <label>Detalles de la Demora 2</label>
-                <textarea v-model="formData.delay_2_details" rows="2" class="form-control" placeholder="Ej. Distancia larga, falta de transporte, mal estado de caminos, problemas económicos..."></textarea>
-              </div>
-            </div>
 
-            <!-- Demora 3 -->
-            <div class="delay-card" :class="{ 'active-delay': formData.delay_3_care }">
-              <div class="delay-header">
-                <label class="toggle-switch">
-                  <input type="checkbox" v-model="formData.delay_3_care">
-                  <span class="slider round"></span>
+              <div class="rounded-xl border bg-white p-4 transition-colors" :class="formData.delay_2_transport ? 'border-orange-300 shadow-sm' : 'border-slate-200'">
+                <label class="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" v-model="formData.delay_2_transport" class="mt-1 h-4 w-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500" />
+                  <div class="flex-1">
+                    <span class="block text-sm font-bold text-slate-900">Demora 2: Transporte al centro</span>
+                    <span class="block text-xs text-slate-500 mb-2">Distancia, falta de caminos, ausencia de ambulancia.</span>
+                    <textarea v-if="formData.delay_2_transport" v-model="formData.delay_2_details" rows="2" class="w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm focus:border-orange-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-orange-500" placeholder="Detalles de la demora..."></textarea>
+                  </div>
                 </label>
-                <div class="delay-title">
-                  <h4>Demora 3: Atención</h4>
-                  <span>Retraso en recibir atención adecuada y oportuna en el centro de salud.</span>
-                </div>
               </div>
-              <div v-if="formData.delay_3_care" class="delay-body">
-                <label>Detalles de la Demora 3</label>
-                <textarea v-model="formData.delay_3_details" rows="2" class="form-control" placeholder="Ej. Falta de insumos, personal no disponible, mala referencia, demoras administrativas..."></textarea>
+
+              <div class="rounded-xl border bg-white p-4 transition-colors" :class="formData.delay_3_care ? 'border-orange-300 shadow-sm' : 'border-slate-200'">
+                <label class="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" v-model="formData.delay_3_care" class="mt-1 h-4 w-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500" />
+                  <div class="flex-1">
+                    <span class="block text-sm font-bold text-slate-900">Demora 3: Atención oportuna</span>
+                    <span class="block text-xs text-slate-500 mb-2">Falta de personal, insumos, sangre, o retrasos administrativos.</span>
+                    <textarea v-if="formData.delay_3_care" v-model="formData.delay_3_details" rows="2" class="w-full rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm focus:border-orange-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-orange-500" placeholder="Detalles de la demora..."></textarea>
+                  </div>
+                </label>
               </div>
             </div>
           </div>
 
-          <div class="form-section">
-            <h3 class="section-title"><i class="pi pi-pencil"></i> Notas Adicionales</h3>
-            <textarea v-model="formData.notes" rows="3" class="form-control" placeholder="Observaciones generales sobre el caso..."></textarea>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Notas Adicionales</label>
+            <textarea v-model="formData.notes" rows="3" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:border-pink-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-pink-500" placeholder="Observaciones generales..."></textarea>
           </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline" @click="closeModal">Cancelar</button>
-            <button type="submit" class="btn btn-primary" :disabled="saving">
-              <i class="pi pi-save" v-if="!saving"></i>
-              <i class="pi pi-spin pi-spinner" v-else></i>
-              {{ saving ? 'Guardando...' : 'Guardar Registro' }}
-            </button>
-          </div>
         </form>
+
+        <div class="flex items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/50 px-8 py-4">
+          <button type="button" class="rounded-full px-5 py-2 text-sm font-bold text-slate-600 transition hover:bg-slate-100" @click="closeModal">Cancelar</button>
+          <button type="button" class="rounded-full bg-pink-500 px-6 py-2 text-sm font-bold text-white shadow-md transition hover:bg-pink-600 flex items-center gap-2" :disabled="saving" @click="saveRecord">
+            <i v-if="saving" class="pi pi-spin pi-spinner"></i>
+            {{ saving ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
       </div>
     </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+import { apiUrl } from '@/utils/api';
 
 interface NearMissRecord {
   id?: number;
@@ -237,7 +245,7 @@ const formData = ref<NearMissRecord>({ ...defaultForm });
 const fetchRecords = async () => {
   loading.value = true;
   try {
-    const res = await fetch(`${API_URL}/api/near-miss/`);
+    const res = await fetch(apiUrl('/near-miss/'));
     if (res.ok) {
       records.value = await res.json();
     }
@@ -273,8 +281,8 @@ const saveRecord = async () => {
   try {
     const method = isEditing.value ? 'PUT' : 'POST';
     const url = isEditing.value 
-      ? `${API_URL}/api/near-miss/${formData.value.id}/` 
-      : `${API_URL}/api/near-miss/`;
+      ? apiUrl(`/near-miss/${formData.value.id}/`) 
+      : apiUrl('/near-miss/');
       
     const res = await fetch(url, {
       method,
@@ -302,7 +310,7 @@ const confirmDelete = async (id?: number) => {
   if (!id) return;
   if (confirm('¿Está seguro de eliminar este registro Near-Miss?')) {
     try {
-      const res = await fetch(`${API_URL}/api/near-miss/${id}/`, {
+      const res = await fetch(apiUrl(`/near-miss/${id}/`), {
         method: 'DELETE',
       });
       if (res.ok) {
@@ -316,189 +324,20 @@ const confirmDelete = async (id?: number) => {
 
 const getConditionLabel = (val: string) => {
   const map: Record<string, string> = {
-    hemorrhage: 'Hemorragia',
-    hypertension: 'Trast. Hipertensivo',
+    hemorrhage: 'Hemorragia severa',
+    hypertension: 'Trastorno hipertensivo',
     sepsis: 'Sepsis',
-    other: 'Otra'
+    other: 'Otra complicación'
   };
   return map[val] || val;
 };
 
+function countByStatus(status: 'survived' | 'deceased'): number {
+  return records.value.filter((r) => r.survival_status === status).length;
+}
+
 const formatDate = (dateString?: string) => {
   if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('es-ES');
+  return new Date(dateString).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' });
 };
 </script>
-
-<style scoped>
-.large-modal {
-  max-width: 800px;
-  width: 90%;
-}
-
-.form-section {
-  background-color: #f8fafc;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  border: 1px solid #e2e8f0;
-}
-
-.highlight-section {
-  background-color: #fffaf0;
-  border-color: #fbd38d;
-}
-
-.section-title {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: #1e293b;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.25rem;
-}
-
-.section-desc {
-  color: #64748b;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-}
-
-.form-row {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-}
-.form-row .form-group {
-  flex: 1;
-}
-
-.delay-card {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  transition: all 0.3s ease;
-}
-
-.active-delay {
-  border-color: #f6ad55;
-  box-shadow: 0 4px 6px -1px rgba(237, 137, 54, 0.1);
-}
-
-.delay-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.delay-title h4 {
-  margin: 0 0 0.25rem 0;
-  color: #2d3748;
-}
-
-.delay-title span {
-  font-size: 0.85rem;
-  color: #718096;
-}
-
-.delay-body {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px dashed #e2e8f0;
-  animation: slideDown 0.3s ease-out;
-}
-
-.delay-badges {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.badge-success {
-  background-color: #c6f6d5;
-  color: #22543d;
-}
-
-.badge-danger {
-  background-color: #fed7d7;
-  color: #742a2a;
-}
-
-/* Toggle Switch Styles */
-.toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 46px;
-  height: 24px;
-  flex-shrink: 0;
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #cbd5e0;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #ed8936;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #ed8936;
-}
-
-input:checked + .slider:before {
-  transform: translateX(22px);
-}
-
-.slider.round {
-  border-radius: 24px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 768px) {
-  .form-row {
-    flex-direction: column;
-    gap: 0;
-  }
-}
-</style>
