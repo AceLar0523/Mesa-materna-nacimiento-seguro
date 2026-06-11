@@ -209,3 +209,41 @@ class AdolescentConsultation(models.Model):
 
     def __str__(self):
         return f'Consulta {self.session_token[:8]}'
+
+
+class NearMissRecord(models.Model):
+    CONDITION_CHOICES = [
+        ('hemorrhage', 'Hemorragia severa'),
+        ('hypertension', 'Trastorno hipertensivo severo (Preeclampsia/Eclampsia)'),
+        ('sepsis', 'Infección sistémica severa / Sepsis'),
+        ('other', 'Otra complicación severa'),
+    ]
+
+    patient_age = models.PositiveIntegerField()
+    gestational_age = models.PositiveIntegerField(help_text="Edad gestacional en semanas")
+    condition = models.CharField(max_length=24, choices=CONDITION_CHOICES)
+    health_center = models.ForeignKey(HealthCenter, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    # 3 Delays
+    delay_1_decision = models.BooleanField(default=False, verbose_name="Demora 1: Decisión")
+    delay_1_details = models.TextField(blank=True, default='', help_text="Demora en tomar la decisión de buscar ayuda (e.g. desconocimiento, barreras culturales)")
+    
+    delay_2_transport = models.BooleanField(default=False, verbose_name="Demora 2: Transporte")
+    delay_2_details = models.TextField(blank=True, default='', help_text="Demora en llegar al centro de salud (e.g. distancia, falta de transporte, mal estado de vías)")
+    
+    delay_3_care = models.BooleanField(default=False, verbose_name="Demora 3: Atención")
+    delay_3_details = models.TextField(blank=True, default='', help_text="Demora en recibir atención oportuna y de calidad (e.g. falta de personal, insumos, burocracia)")
+    
+    survival_status = models.CharField(max_length=24, choices=[('survived', 'Sobrevivió'), ('deceased', 'Falleció')], default='survived')
+    notes = models.TextField(blank=True, default='')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Registro Near-Miss'
+        verbose_name_plural = 'Registros Near-Miss'
+
+    def __str__(self):
+        return f'Near-Miss {self.id} - {self.get_condition_display()} (Edad: {self.patient_age})'

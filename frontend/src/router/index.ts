@@ -35,6 +35,8 @@ import AdminCentrosSaludPage from '@/pages/admin/AdminCentrosSaludPage.vue';
 import AdminAlertasPanicoPage from '@/pages/admin/AdminAlertasPanicoPage.vue';
 import AdminConsultasAdolescentesPage from '@/pages/admin/AdminConsultasAdolescentesPage.vue';
 import PublicSectorAdminPage from '@/pages/admin/PublicSectorAdminPage.vue';
+import InteligenciaTerritorialPage from '@/pages/admin/InteligenciaTerritorialPage.vue';
+import AdminNearMissPage from '@/pages/admin/AdminNearMissPage.vue';
 import UnfpaBoliviaPage from '@/pages/UnfpaBoliviaPage.vue';
 import RepresentantePage from '@/pages/RepresentantePage.vue';
 import UnfpaLacPage from '@/pages/UnfpaLacPage.vue';
@@ -134,6 +136,16 @@ const router = createRouter({
               path: 'consultas',
               name: 'AdminConsultasAdolescentes',
               component: AdminConsultasAdolescentesPage
+            },
+            {
+              path: 'inteligencia-territorial',
+              name: 'InteligenciaTerritorial',
+              component: InteligenciaTerritorialPage
+            },
+            {
+              path: 'near-miss',
+              name: 'AdminNearMiss',
+              component: AdminNearMissPage
             }
           ]
         }

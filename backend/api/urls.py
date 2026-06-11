@@ -10,6 +10,8 @@ from .views import (
     RegistroViewSet,
     blog_stream,
     chat_materna,
+    heatmap_data,
+    NearMissRecordViewSet,
 )
 
 router = DefaultRouter()
@@ -19,10 +21,12 @@ router.register(r'contact-messages', ContactMessageViewSet, basename='contact-me
 router.register(r'health-centers', HealthCenterViewSet, basename='health-center')
 router.register(r'panic-alerts', PanicAlertViewSet, basename='panic-alert')
 router.register(r'adolescent-consultations', AdolescentConsultationViewSet, basename='adolescent-consultation')
+router.register(r'near-miss', NearMissRecordViewSet, basename='near-miss')
 
 urlpatterns = [
     path('auth/', include('api.modules.auth.urls')),
     path('blog/stream/', blog_stream, name='blog-stream'),
     path('chat/', chat_materna, name='chat-materna'), # <-- Tu nueva ruta del chatbot
+    path('heatmap/', heatmap_data, name='heatmap-data'),
     path('', include(router.urls)),
 ]

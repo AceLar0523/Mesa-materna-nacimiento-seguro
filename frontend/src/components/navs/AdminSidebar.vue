@@ -136,6 +136,8 @@ const publicSectorNav = [
   { label: 'Centros de Salud', icon: 'pi pi-map-marker', to: '/dashboard/sector-publico/centros', badge: null },
   { label: 'Alertas de Pánico', icon: 'pi pi-bell', to: '/dashboard/sector-publico/alertas', badge: 'New' },
   { label: 'Consultas Jóvenes', icon: 'pi pi-comments', to: '/dashboard/sector-publico/consultas', badge: '5' },
+  { label: 'Inteligencia Territorial', icon: 'pi pi-map', to: '/dashboard/sector-publico/inteligencia-territorial', badge: 'KDE' },
+  { label: 'Registro Near-Miss', icon: 'pi pi-heartbeat', to: '/dashboard/sector-publico/near-miss', badge: null },
 ];
 
 const systemNav = [

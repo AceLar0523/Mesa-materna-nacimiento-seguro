@@ -15,3 +15,7 @@ langchain-google-genai
 langchain-chroma
 langchain-classic
 langchain-core
+
+# Data Science / Math
+scipy
+numpy

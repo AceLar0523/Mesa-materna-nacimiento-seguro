@@ -59,6 +59,14 @@ const modules = [
     icon: 'pi pi-comments',
     accent: 'bg-gradient-to-br from-[#7C3AED] to-[#F97316]',
     description: 'Responder consultas anónimas y marcar su estado sin exponer datos personales.'
+  },
+  {
+    to: '/dashboard/sector-publico/near-miss',
+    title: 'Registro Near-Miss',
+    badge: 'Nuevo',
+    icon: 'pi pi-heartbeat',
+    accent: 'bg-gradient-to-br from-[#EC4899] to-[#F43F5E]',
+    description: 'Gestión y análisis de casos de Morbilidad Materna Extrema bajo el enfoque de las 3 Demoras.'
   }
 ];
 

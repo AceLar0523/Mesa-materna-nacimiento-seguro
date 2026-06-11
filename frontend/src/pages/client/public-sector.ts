@@ -71,6 +71,13 @@ export const moduleCards = [
     accent: 'from-[#0F766E] to-[#14B8A6]'
   },
   {
+    key: 'near-miss',
+    path: '/dashboard/sector-publico/near-miss',
+    label: 'Morbilidad Materna',
+    icon: 'pi-heartbeat',
+    accent: 'from-[#EC4899] to-[#F43F5E]'
+  },
+  {
     key: 'alarmas',
     path: '/sector-publico/alarma-panico',
     label: 'Señales de alarma',

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import AdolescentConsultation, BlogPost, ContactMessage, HealthCenter, PanicAlert, RegistroMaternal
+from .models import AdolescentConsultation, BlogPost, ContactMessage, HealthCenter, PanicAlert, RegistroMaternal, NearMissRecord
 
 class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
@@ -87,3 +87,10 @@ class AdolescentConsultationSerializer(serializers.ModelSerializer):
             'answered_at',
         ]
         read_only_fields = ['id', 'created_at', 'answered_at']
+
+
+class NearMissRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NearMissRecord
+        fields = '__all__'
+        read_only_fields = ['id', 'created_at', 'updated_at']

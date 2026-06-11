@@ -302,6 +302,13 @@ const publicSectorModules = [
     accent: 'from-[#0F766E] to-[#14B8A6]'
   },
   {
+    path: '/dashboard/sector-publico/near-miss',
+    label: 'Morbilidad Materna',
+    description: 'Registro Near-Miss y 3 Demoras.',
+    icon: 'pi pi-heartbeat',
+    accent: 'from-[#EC4899] to-[#F43F5E]'
+  },
+  {
     path: '/sector-publico/alarma-panico',
     label: 'Señales de alarma',
     description: 'Síntomas críticos y botón de pánico.',
