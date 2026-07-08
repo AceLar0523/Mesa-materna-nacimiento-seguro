@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen bg-gray-50 pt-20">
     <PageHero
-      kicker="Comunidad"
-      title="Comunidad"
-      subtitle="Un espacio para conversar, aprender y movilizar accion colectiva por la salud sexual y reproductiva."
+      :kicker="$t('comunidad_page.kicker')"
+      :title="$t('comunidad_page.title')"
+      :subtitle="$t('comunidad_page.subtitle')"
       backgroundImage="/img/hero-comunidad.jpg"
     />
 
@@ -27,18 +27,21 @@
 import { onMounted } from 'vue';
 import PageHero from '@/components/common/PageHero.vue';
 import Footer from '@/components/landing/Footer/Footer.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const items = [
-  { title: 'Blog', to: '/blog', icon: 'pi-pencil', desc: 'Historias, reflexiones y recomendaciones de especialistas y comunidad.' },
-  { title: 'Ultimas Noticias', to: '/noticias', icon: 'pi-megaphone', desc: 'Actualizaciones institucionales, avances y articulacion con aliados.' },
-  { title: 'Publicaciones', to: '/comunidad/publicaciones', icon: 'pi-file', desc: 'Documentos tecnicos, guias y material de consulta publica.' },
-  { title: 'Campanas', to: '/comunidad/campanas', icon: 'pi-bullhorn', desc: 'Iniciativas de sensibilizacion para promover derechos y prevencion.' },
-  { title: 'Multimedia', to: '/comunidad/multimedia', icon: 'pi-video', desc: 'Videos, galerias y piezas visuales para educacion comunitaria.' },
-  { title: 'Instituciones', to: '/instituciones', icon: 'pi-building', desc: 'Conoce la red interinstitucional que hace posible esta agenda.' }
+  { title: t('comunidad_page.item_blog_title'), to: '/blog', icon: 'pi-pencil', desc: t('comunidad_page.item_blog_desc') },
+  { title: t('comunidad_page.item_news_title'), to: '/noticias', icon: 'pi-megaphone', desc: t('comunidad_page.item_news_desc') },
+  { title: t('comunidad_page.item_publications_title'), to: '/comunidad/publicaciones', icon: 'pi-file', desc: t('comunidad_page.item_publications_desc') },
+  { title: t('comunidad_page.item_campaigns_title'), to: '/comunidad/campanas', icon: 'pi-bullhorn', desc: t('comunidad_page.item_campaigns_desc') },
+  { title: t('comunidad_page.item_multimedia_title'), to: '/comunidad/multimedia', icon: 'pi-video', desc: t('comunidad_page.item_multimedia_desc') },
+  { title: t('comunidad_page.item_institutions_title'), to: '/instituciones', icon: 'pi-building', desc: t('comunidad_page.item_institutions_desc') }
 ];
 
 onMounted(() => {
-  document.title = 'Comunidad | MNMNS Bolivia';
+  document.title = t('comunidad_page.doc_title_prefix') + ' | MNMNS Bolivia';
   window.scrollTo(0, 0);
 });
 </script>

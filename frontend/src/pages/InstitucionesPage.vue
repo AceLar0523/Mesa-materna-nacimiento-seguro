@@ -2,9 +2,9 @@
     <div class="pt-20 bg-gray-50 min-h-screen flex flex-col">
 
         <PageHero
-            kicker="Red de Aliados"
-            title="Instituciones Miembro"
-            subtitle="La Mesa Nacional de Maternidad y Nacimiento Seguros es un esfuerzo conjunto. Conoce a las organizaciones que aportan recursos, conocimiento y trabajo de campo para salvar vidas en Bolivia."
+            :kicker="$t('instituciones_page.hero_kicker')"
+            :title="$t('instituciones_page.hero_title')"
+            :subtitle="$t('instituciones_page.hero_subtitle')"
             backgroundImage="/img/fondo13.png"
         />
 
@@ -12,14 +12,13 @@
 
             <div class="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in">
                 <button
-                    class="px-6 py-2 rounded-full bg-[#F97316] text-white font-bold shadow-md text-sm transition-transform hover:-translate-y-1">Todas</button>
+                    class="px-6 py-2 rounded-full bg-[#F97316] text-white font-bold shadow-md text-sm transition-transform hover:-translate-y-1">{{ $t('instituciones_page.filter_all') }}</button>
                 <button
-                    class="px-6 py-2 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-[#F97316] hover:text-[#F97316] text-sm transition-all">Gubernamentales</button>
+                    class="px-6 py-2 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-[#F97316] hover:text-[#F97316] text-sm transition-all">{{ $t('instituciones_page.filter_governmental') }}</button>
                 <button
-                    class="px-6 py-2 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-[#F97316] hover:text-[#F97316] text-sm transition-all">Internacionales</button>
+                    class="px-6 py-2 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-[#F97316] hover:text-[#F97316] text-sm transition-all">{{ $t('instituciones_page.filter_international') }}</button>
                 <button
-                    class="px-6 py-2 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-[#F97316] hover:text-[#F97316] text-sm transition-all">Sociedad
-                    Civil</button>
+                    class="px-6 py-2 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-[#F97316] hover:text-[#F97316] text-sm transition-all">{{ $t('instituciones_page.filter_civil_society') }}</button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -40,7 +39,7 @@
                         <div v-else class="h-full w-full flex items-center justify-center bg-gradient-to-br from-orange-50 to-white text-[#F97316]">
                             <div class="text-center">
                                 <div class="text-2xl font-black tracking-wider">{{ inst.iniciales }}</div>
-                                <div class="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Logo</div>
+                                <div class="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">{{ $t('instituciones_page.logo_fallback_label') }}</div>
                             </div>
                         </div>
                     </div>
@@ -64,7 +63,7 @@
                     <div class="mt-auto w-full pt-6 border-t border-gray-100">
                         <a href="#"
                             class="text-gray-400 hover:text-[#F97316] font-medium text-sm flex items-center justify-center gap-2 transition-colors">
-                            Visitar sitio web <i class="pi pi-external-link text-xs"></i>
+                            {{ $t('instituciones_page.visit_website') }} <i class="pi pi-external-link text-xs"></i>
                         </a>
                     </div>
                 </article>
@@ -74,14 +73,13 @@
 
         <section class="bg-[#F97316] py-16">
             <div class="max-w-4xl mx-auto px-4 text-center">
-                <h2 class="text-3xl font-bold text-white mb-4">¿Tu organización quiere sumarse?</h2>
+                <h2 class="text-3xl font-bold text-white mb-4">{{ $t('instituciones_page.join_us_title') }}</h2>
                 <p class="text-orange-50 mb-8 text-lg">
-                    La reducción de la mortalidad materna requiere del esfuerzo de todos. Si tu institución trabaja en
-                    salud, derechos humanos o desarrollo social, contáctanos.
+                    {{ $t('instituciones_page.join_us_description') }}
                 </p>
                 <router-link to="/contactanos"
                     class="inline-block px-8 py-4 bg-white text-[#F97316] font-bold rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all">
-                    Escríbenos para formar una alianza
+                    {{ $t('instituciones_page.join_us_button') }}
                 </router-link>
             </div>
         </section>

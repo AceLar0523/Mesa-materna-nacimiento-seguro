@@ -1,9 +1,9 @@
 <template>
   <div class="pt-20 bg-gray-50 min-h-screen flex flex-col">
     <PageHero
-      kicker="Comunidad"
-      title="Voces de la Comunidad"
-      subtitle="Un espacio para compartir recomendaciones, testimonios y opiniones sobre la maternidad y el nacimiento seguro en Bolivia."
+      :kicker="$t('blog_page.hero_kicker')"
+      :title="$t('blog_page.hero_title')"
+      :subtitle="$t('blog_page.hero_subtitle')"
       backgroundImage="/img/fondo9.jpg"
     />
 
@@ -16,42 +16,42 @@
               <div class="w-10 h-10 rounded-full bg-orange-50 text-[#F97316] flex items-center justify-center">
                 <i class="pi pi-pencil text-lg"></i>
               </div>
-              <h2 class="text-xl font-bold text-gray-800">Crear Publicación</h2>
+              <h2 class="text-xl font-bold text-gray-800">{{ $t('blog_page.create_post_heading') }}</h2>
             </div>
 
             <form @submit.prevent="publicarPost" class="space-y-4">
               <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Categoría</label>
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">{{ $t('blog_page.category_label') }}</label>
                 <select v-model="nuevoPost.categoria" class="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F97316]/50 focus:border-[#F97316] transition-all appearance-none cursor-pointer">
-                  <option value="Recomendacion">Recomendación Médica</option>
-                  <option value="Testimonio">Testimonio de Vida</option>
-                  <option value="Opinion">Opinión</option>
-                  <option value="Duda">Duda / Consulta</option>
+                  <option value="Recomendacion">{{ $t('blog_page.category_option_recommendation') }}</option>
+                  <option value="Testimonio">{{ $t('blog_page.category_option_testimony') }}</option>
+                  <option value="Opinion">{{ $t('blog_page.category_option_opinion') }}</option>
+                  <option value="Duda">{{ $t('blog_page.category_option_doubt') }}</option>
                 </select>
               </div>
 
               <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Título</label>
-                <input v-model="nuevoPost.titulo" type="text" placeholder="Ej. Mi experiencia en la Casa Materna..." required
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">{{ $t('blog_page.title_label') }}</label>
+                <input v-model="nuevoPost.titulo" type="text" :placeholder="$t('blog_page.title_placeholder')" required
                        class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F97316]/50 focus:border-[#F97316] transition-all">
               </div>
 
               <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tu Nombre (Opcional)</label>
-                <input v-model="nuevoPost.autor" type="text" placeholder="Anónimo" 
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">{{ $t('blog_page.author_label') }}</label>
+                <input v-model="nuevoPost.autor" type="text" :placeholder="$t('blog_page.author_placeholder')" 
                        class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F97316]/50 focus:border-[#F97316] transition-all">
               </div>
 
               <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tu Mensaje</label>
-                <textarea v-model="nuevoPost.contenido" rows="4" placeholder="Escribe aquí tu mensaje, consejo o historia..." required
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">{{ $t('blog_page.message_label') }}</label>
+                <textarea v-model="nuevoPost.contenido" rows="4" :placeholder="$t('blog_page.message_placeholder')" required
                           class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F97316]/50 focus:border-[#F97316] transition-all resize-none"></textarea>
               </div>
 
               <button type="submit" :disabled="isSubmitting"
                       class="w-full bg-[#F97316] hover:bg-[#EA580C] text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-2">
                 <i v-if="isSubmitting" class="pi pi-spinner animate-spin"></i>
-                <span v-else>Publicar ahora</span>
+                <span v-else>{{ $t('blog_page.publish_now_button') }}</span>
               </button>
             </form>
           </div>
@@ -59,8 +59,8 @@
 
         <div class="lg:col-span-2">
           <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Publicaciones Recientes</h2>
-            <span class="text-sm font-medium text-gray-500 bg-gray-200 px-3 py-1 rounded-full">{{ posts.length }} artículos</span>
+            <h2 class="text-2xl font-bold text-gray-800">{{ $t('blog_page.recent_posts_heading') }}</h2>
+            <span class="text-sm font-medium text-gray-500 bg-gray-200 px-3 py-1 rounded-full">{{ posts.length }} {{ $t('blog_page.articles_count_suffix') }}</span>
           </div>
 
           <div v-if="postError" class="mb-4 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -107,7 +107,7 @@
                 </button>
                 <button class="flex items-center gap-2 text-gray-400 hover:text-[#F97316] transition-colors group">
                   <i class="pi pi-comment group-hover:scale-110 transition-transform"></i>
-                  <span class="text-sm font-medium">Comentar</span>
+                  <span class="text-sm font-medium">{{ $t('blog_page.comment_button') }}</span>
                 </button>
               </div>
 
@@ -117,13 +117,13 @@
 
           <div v-if="!isLoadingPosts && posts.length === 0" class="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm mt-6">
             <i class="pi pi-inbox text-5xl text-gray-300 mb-4"></i>
-            <h3 class="text-xl font-bold text-gray-700">Aún no hay publicaciones</h3>
-            <p class="text-gray-500 mt-2">¡Sé la primera persona en compartir tu experiencia!</p>
+            <h3 class="text-xl font-bold text-gray-700">{{ $t('blog_page.no_posts_title') }}</h3>
+            <p class="text-gray-500 mt-2">{{ $t('blog_page.no_posts_subtitle') }}</p>
           </div>
 
           <div v-if="isLoadingPosts" class="text-center py-14 text-gray-500">
             <i class="pi pi-spinner animate-spin text-2xl"></i>
-            <p class="mt-2">Cargando publicaciones...</p>
+            <p class="mt-2">{{ $t('blog_page.loading_posts_message') }}</p>
           </div>
 
         </div>
@@ -141,6 +141,9 @@ import { useToast } from 'primevue/usetoast';
 import PageHero from '@/components/common/PageHero.vue';
 import Footer from '../components/landing/Footer/Footer.vue';
 import { apiUrl } from '@/utils/api';
+import { useI18n } from 'vue-i18n'; // ADDED
+
+const { t } = useI18n(); // ADDED
 
 type CategoriaBlog = 'Recomendacion' | 'Testimonio' | 'Opinion' | 'Duda' | 'Noticia' | 'Publicacion';
 
@@ -181,11 +184,13 @@ const nuevoPost = ref({
 const posts = ref<BlogPostUI[]>([]);
 
 const categoriaLabel = (categoria: CategoriaBlog): string => {
-  if (categoria === 'Recomendacion') return 'Recomendación';
-  if (categoria === 'Opinion') return 'Opinión';
-  if (categoria === 'Noticia') return 'Noticia';
-  if (categoria === 'Publicacion') return 'Publicación';
-  return categoria;
+  if (categoria === 'Recomendacion') return t('blog_page.category_display_recommendation');
+  if (categoria === 'Opinion') return t('blog_page.category_display_opinion');
+  if (categoria === 'Noticia') return t('blog_page.category_display_news');
+  if (categoria === 'Publicacion') return t('blog_page.category_display_publication');
+  if (categoria === 'Testimonio') return t('blog_page.category_display_testimony');
+  if (categoria === 'Duda') return t('blog_page.category_display_doubt');
+  return categoria; // Fallback for unknown categories
 };
 
 const mapApiToUI = (post: BlogPostApi): BlogPostUI => ({
@@ -211,13 +216,13 @@ const cargarPosts = async () => {
     postError.value = '';
     const response = await fetch(apiUrl('/blog-posts/'));
     if (!response.ok) {
-      throw new Error('No se pudieron cargar las publicaciones.');
+      throw new Error(t('blog_page.error_loading_posts'));
     }
 
     const data = (await response.json()) as BlogPostApi[];
     setPostsFromApi(data);
   } catch (error) {
-    postError.value = error instanceof Error ? error.message : 'Error inesperado al cargar el blog.';
+    postError.value = error instanceof Error ? error.message : t('blog_page.error_unexpected_loading_blog');
   } finally {
     isLoadingPosts.value = false;
   }
@@ -232,7 +237,7 @@ const conectarStream = () => {
       setPostsFromApi(data);
       postError.value = '';
     } catch {
-      postError.value = 'Se recibieron datos no validos del stream del blog.';
+      postError.value = t('blog_page.error_invalid_stream_data');
     }
   };
 
@@ -264,7 +269,7 @@ const publicarPost = async () => {
     });
 
     if (!response.ok) {
-      throw new Error('No se pudo publicar el mensaje. Intenta nuevamente.');
+      throw new Error(t('blog_page.error_publish_message_failed'));
     }
 
     const data = (await response.json()) as BlogPostApi;
@@ -279,12 +284,12 @@ const publicarPost = async () => {
 
     toast.add({
       severity: 'success',
-      summary: 'Publicacion exitosa',
-      detail: 'Tu publicacion se guardo correctamente.',
+      summary: t('blog_page.toast_publish_success_summary'),
+      detail: t('blog_page.toast_publish_success_detail'),
       life: 3000
     });
   } catch (error) {
-    postError.value = error instanceof Error ? error.message : 'Error inesperado al publicar.';
+    postError.value = error instanceof Error ? error.message : t('blog_page.error_unexpected_publishing');
   } finally {
     isSubmitting.value = false;
   }
@@ -299,20 +304,20 @@ const darLike = async (postId: number) => {
     });
 
     if (!response.ok) {
-      throw new Error('No se pudo registrar tu reaccion.');
+      throw new Error(t('blog_page.error_reaction_failed'));
     }
 
     const data = (await response.json()) as BlogPostApi;
     posts.value = posts.value.map((post) => (post.id === postId ? mapApiToUI(data) : post));
   } catch (error) {
-    postError.value = error instanceof Error ? error.message : 'Error inesperado al reaccionar.';
+    postError.value = error instanceof Error ? error.message : t('blog_page.error_unexpected_reaction');
   } finally {
     likeLoadingByPost.value = { ...likeLoadingByPost.value, [postId]: false };
   }
 };
 
 onMounted(() => {
-  document.title = 'Blog y Comunidad | Mesa de Maternidad Bolivia';
+  document.title = t('blog_page.document_title');
   window.scrollTo(0, 0);
   void cargarPosts();
   conectarStream();

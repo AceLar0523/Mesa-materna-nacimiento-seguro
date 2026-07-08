@@ -14,8 +14,8 @@
       </template>
     </Suspense>
     <div v-else class="p-6">
-      <h3 class="font-semibold text-white text-lg">Not Found</h3>
-      <p class="text-[#a6a6a6] text-sm">This section is unavailable.</p>
+      <h3 class="font-semibold text-white text-lg">{{ $t('category_page.not_found_title') }}</h3>
+      <p class="text-[#a6a6a6] text-sm">{{ $t('category_page.section_unavailable') }}</p>
     </div>
   </div>
 

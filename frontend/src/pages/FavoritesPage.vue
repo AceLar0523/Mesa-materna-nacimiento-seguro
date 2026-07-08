@@ -6,7 +6,7 @@
       <Sidebar />
 
       <div class="category-page">
-        <ComponentList :list="savedList" title="Favorites" sorting="none" has-delete-button />
+        <ComponentList :list="savedList" :title="$t('favorites_page.favorites_title')" sorting="none" has-delete-button />
       </div>
     </section>
   </main>

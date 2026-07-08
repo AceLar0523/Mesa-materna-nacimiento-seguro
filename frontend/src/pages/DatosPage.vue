@@ -1,9 +1,9 @@
 <template>
   <div class="pt-20 bg-[#f8fafc] min-h-screen">
     <PageHero
-      kicker="Indicadores"
-      title="Visualización de Impacto"
-      subtitle="Monitoreo en tiempo real de los indicadores de salud materna y neonatal en Bolivia. Datos oficiales procesados por la Mesa Nacional de Maternidad y Nacimiento Seguros."
+      :kicker="$t('datos_page.kicker_indicadores')"
+      :title="$t('datos_page.hero_title')"
+      :subtitle="$t('datos_page.hero_subtitle')"
       backgroundImage="/img/fondo8.jpg"
     />
 
@@ -29,8 +29,8 @@
         
         <div class="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 animate-fade-in-up">
           <div class="flex justify-between items-center mb-10">
-            <h3 class="text-2xl font-bold text-gray-900">Cobertura de Parto Institucional</h3>
-            <span class="text-green-500 font-bold bg-green-50 px-3 py-1 rounded-full text-xs">+12% vs 2020</span>
+            <h3 class="text-2xl font-bold text-gray-900">{{ $t('datos_page.chart_parto_institucional_title') }}</h3>
+            <span class="text-green-500 font-bold bg-green-50 px-3 py-1 rounded-full text-xs">{{ $t('datos_page.chart_parto_institucional_growth') }}</span>
           </div>
           <div class="relative h-64 w-full">
             <svg viewBox="0 0 1000 400" class="w-full h-full">
@@ -45,16 +45,16 @@
               <circle cx="1000" cy="100" r="10" fill="#F97316" class="animate-pulse" />
             </svg>
             <div class="flex justify-between mt-4 text-xs font-bold text-gray-400">
-              <span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025 (PROY)</span>
+              <span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>{{ $t('datos_page.chart_year_proj') }}</span>
             </div>
           </div>
           <p class="mt-8 text-sm text-gray-500 italic">
-            * El incremento refleja el éxito de la política SAFCI en comunidades rurales de difícil acceso.
+            {{ $t('datos_page.chart_parto_institucional_note') }}
           </p>
         </div>
 
         <div class="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 animate-fade-in-up delay-200">
-          <h3 class="text-2xl font-bold text-gray-900 mb-10">Distribución de Kits Médicos</h3>
+          <h3 class="text-2xl font-bold text-gray-900 mb-10">{{ $t('datos_page.chart_kits_medicos_title') }}</h3>
           <div class="space-y-6">
             <div v-for="dept in departamentos" :key="dept.name">
               <div class="flex justify-between text-sm font-bold mb-2">
@@ -78,16 +78,16 @@
           <div class="w-12 h-12 bg-orange-50 text-[#F97316] rounded-2xl flex items-center justify-center">
             <i class="pi pi-table text-xl"></i>
           </div>
-          <h3 class="text-2xl font-bold text-gray-900">Detalle de Inversión Interinstitucional</h3>
+          <h3 class="text-2xl font-bold text-gray-900">{{ $t('datos_page.table_inversion_title') }}</h3>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left">
             <thead class="bg-gray-50 text-gray-500 text-xs font-bold uppercase tracking-wider">
               <tr>
-                <th class="px-8 py-6">Programa</th>
-                <th class="px-8 py-6">Institución</th>
-                <th class="px-8 py-6">Inversión (USD)</th>
-                <th class="px-8 py-6">Estado</th>
+                <th class="px-8 py-6">{{ $t('datos_page.table_header_programa') }}</th>
+                <th class="px-8 py-6">{{ $t('datos_page.table_header_institucion') }}</th>
+                <th class="px-8 py-6">{{ $t('datos_page.table_header_inversion') }}</th>
+                <th class="px-8 py-6">{{ $t('datos_page.table_header_estado') }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
@@ -118,14 +118,17 @@
 import { ref, onMounted } from 'vue';
 import PageHero from '@/components/common/PageHero.vue';
 import Footer from '../components/landing/Footer/Footer.vue';
+import { useI18n } from 'vue-i18n'; // Import useI18n
+
+const { t } = useI18n(); // Destructure t
 
 const animateBars = ref(false);
 
 const stats = ref([
-  { label: 'Kits Entregados', current: 12540, suffix: '', icon: 'pi-box' },
-  { label: 'Partos Seguros', current: 85, suffix: '%', icon: 'pi-heart-fill' },
-  { label: 'Personal Capacitado', current: 3200, suffix: '+', icon: 'pi-users' },
-  { label: 'Centros Equipados', current: 412, suffix: '', icon: 'pi-building' }
+  { label: t('datos_page.stats_kits_entregados'), current: 12540, suffix: '', icon: 'pi-box' },
+  { label: t('datos_page.stats_partos_seguros'), current: 85, suffix: '%', icon: 'pi-heart-fill' },
+  { label: t('datos_page.stats_personal_capacitado'), current: 3200, suffix: '+', icon: 'pi-users' },
+  { label: t('datos_page.stats_centros_equipados'), current: 412, suffix: '', icon: 'pi-building' }
 ]);
 
 const departamentos = [
@@ -137,14 +140,14 @@ const departamentos = [
 ];
 
 const inversionData = [
-  { id: 1, programa: 'Equipamiento Neonatal', institucion: 'MNMNS', monto: 1250000, estado: 'Ejecutado' },
-  { id: 2, programa: 'Fortalecimiento Casas Maternas', institucion: 'MNMNS', monto: 850000, estado: 'En curso' },
-  { id: 3, programa: 'Kits de Parto Limpio', institucion: 'MNMNS', monto: 420000, estado: 'Ejecutado' },
-  { id: 4, programa: 'Capacitación Intercultural', institucion: 'Ministerio de Salud', monto: 310000, estado: 'En curso' }
+  { id: 1, programa: 'Equipamiento Neonatal', institucion: 'MNMNS', monto: 1250000, estado: t('datos_page.table_status_ejecutado') },
+  { id: 2, programa: 'Fortalecimiento Casas Maternas', institucion: 'MNMNS', monto: 850000, estado: t('datos_page.table_status_en_curso') },
+  { id: 3, programa: 'Kits de Parto Limpio', institucion: 'MNMNS', monto: 420000, estado: t('datos_page.table_status_ejecutado') },
+  { id: 4, programa: 'Capacitación Intercultural', institucion: 'Ministerio de Salud', monto: 310000, estado: t('datos_page.table_status_en_curso') }
 ];
 
 onMounted(() => {
-  document.title = 'Datos y Estadísticas | MNMNS Bolivia';
+  document.title = t('datos_page.document_title');
   window.scrollTo(0, 0);
   
   // Disparar animación de barras después de un pequeño delay

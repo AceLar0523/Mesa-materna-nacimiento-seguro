@@ -12,24 +12,24 @@
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#991a73] opacity-60"></span>
           <span class="relative inline-flex rounded-full h-3 w-3 bg-[#991a73]"></span>
         </span>
-        Trabajando por la niñez en Bolivia
+        {{ $t('hero.badge') }}
       </div>
 
       <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-gray-900 drop-shadow-sm">
-        Mesa de Maternidad y <br class="hidden md:block" />
-        <span class="text-[#F97316]">Nacimiento Seguros</span>
+        {{ $t('hero.title_1') }} <br class="hidden md:block" />
+        <span class="text-[#F97316]">{{ $t('hero.title_2') }}</span>
       </h1>
       
       <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-700 font-medium mb-10 leading-relaxed drop-shadow-sm">
-        Garantizamos que cada madre y bebé reciban la atención, el respeto y el equipamiento médico que merecen durante el embarazo y el parto.
+        {{ $t('hero.description') }}
       </p>  
       
       <div class="flex flex-col sm:flex-row justify-center gap-4">
         <router-link to="/conocenos" class="px-8 py-4 rounded-full bg-[#F97316] text-white font-bold text-lg hover:bg-[#EA580C] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
-          Conoce nuestro impacto
+          {{ $t('hero.btn_impact') }}
         </router-link>
         <router-link to="/datos" class="px-8 py-4 rounded-full bg-white/90 backdrop-blur-sm text-[#991a73] font-bold text-lg border-2 border-[#991a73] hover:bg-gray-50 transition-all shadow-sm">
-          Ver Datos Oficiales
+          {{ $t('hero.btn_data') }}
         </router-link>
       </div>
       

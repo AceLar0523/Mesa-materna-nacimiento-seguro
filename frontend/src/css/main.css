@@ -3,4 +3,25 @@
 @import './category.css';
 @import './landing.css';
 @import './transitions.css';
-@import './admin.css';
+@import 'tailwindcss';
+
+/* Ocultar elementos visuales de Google Translate */
+.goog-te-banner-frame.skiptranslate, 
+.goog-te-gadget-icon,
+.goog-te-gadget-simple,
+#google_translate_element {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+#goog-gt-tt, .goog-te-balloon-frame {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}

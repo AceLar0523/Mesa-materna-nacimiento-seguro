@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen bg-gray-50 pt-20 flex flex-col">
     <PageHero
-      kicker="Comunidad"
-      title="Publicaciones"
-      subtitle="Repositorio de documentos técnicos guardados como publicaciones reales en la base de datos."
+      :kicker="$t('publicaciones_page.kicker_comunidad')"
+      :title="$t('publicaciones_page.title_publicaciones')"
+      :subtitle="$t('publicaciones_page.subtitle_repo')"
       backgroundImage="/img/fondo11.jpg"
     />
 
@@ -13,7 +13,7 @@
       </div>
 
       <div v-if="isLoading" class="py-16 text-center text-gray-500">
-        Cargando publicaciones...
+        {{ $t('publicaciones_page.loading_publications') }}
       </div>
 
       <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -26,13 +26,13 @@
           <h3 class="mt-4 text-xl font-bold text-gray-900">{{ item.titulo }}</h3>
           <p class="mt-2 text-sm text-gray-600 whitespace-pre-line">{{ item.contenido }}</p>
           <div class="mt-5 rounded-full bg-orange-50 px-4 py-2 text-sm font-semibold text-[#F97316]">
-            Responsable: {{ item.autor || 'Equipo técnico' }}
+            {{ $t('publicaciones_page.label_responsable') }} {{ item.autor || $t('publicaciones_page.default_author') }}
           </div>
         </article>
       </div>
 
       <div v-if="!isLoading && publicationPosts.length === 0" class="py-16 text-center text-gray-500">
-        Todavía no hay publicaciones registradas.
+        {{ $t('publicaciones_page.no_publications') }}
       </div>
     </section>
 
@@ -45,6 +45,7 @@ import { computed, onMounted, ref } from 'vue';
 import PageHero from '@/components/common/PageHero.vue';
 import Footer from '@/components/landing/Footer/Footer.vue';
 import { apiUrl } from '@/utils/api';
+import { useI18n } from 'vue-i18n';
 
 type BlogCategory = 'Recomendacion' | 'Testimonio' | 'Opinion' | 'Duda' | 'Noticia' | 'Publicacion';
 
@@ -62,6 +63,8 @@ const posts = ref<BlogPost[]>([]);
 const isLoading = ref(true);
 const errorMessage = ref('');
 
+const { t } = useI18n();
+
 const publicationPosts = computed(() => posts.value.filter((post) => post.categoria === 'Publicacion'));
 
 function formatDate(value: string): string {
@@ -73,19 +76,19 @@ async function loadPublications(): Promise<void> {
     errorMessage.value = '';
     const response = await fetch(apiUrl('/blog-posts/'));
     if (!response.ok) {
-      throw new Error('No se pudieron cargar las publicaciones.');
+      throw new Error(t('publicaciones_page.error_load_failed'));
     }
 
     posts.value = (await response.json()) as BlogPost[];
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'Error inesperado al cargar las publicaciones.';
+    errorMessage.value = error instanceof Error ? error.message : t('publicaciones_page.error_unexpected');
   } finally {
     isLoading.value = false;
   }
 }
 
 onMounted(() => {
-  document.title = 'Publicaciones | MNMNS';
+  document.title = `${t('publicaciones_page.title_publicaciones')} | MNMNS`;
   window.scrollTo(0, 0);
   void loadPublications();
 });

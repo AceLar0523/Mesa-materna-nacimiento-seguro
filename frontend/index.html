@@ -101,10 +101,39 @@
       }
     </script>
     <title>Vue Bits - Animated UI Components For Vue</title>
+    <style type="text/css">
+      /* Forzar que el banner de Google Translate nunca aparezca */
+      .goog-te-banner-frame.skiptranslate,
+      iframe.goog-te-banner-frame {
+        display: none !important;
+      }
+      body {
+        top: 0px !important;
+        position: static !important;
+      }
+      /* Ocultar tooltips al hacer hover */
+      .goog-text-highlight {
+        background-color: transparent !important;
+        box-shadow: none !important;
+      }
+      #goog-gt-tt, .goog-te-balloon-frame {
+        display: none !important;
+      }
+    </style>
   </head>
 
   <body>
+    <div id="google_translate_element" style="display: none;"></div>
     <div id="app"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+          { pageLanguage: 'es', includedLanguages: 'es,ay,qu', autoDisplay: false },
+          'google_translate_element'
+        );
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -62,13 +62,13 @@
             class="flex items-center gap-2 rounded-full border border-teal-100 bg-white px-4 py-2 text-sm font-bold text-[#0F766E] shadow-sm transition hover:border-teal-200 hover:bg-teal-50"
             type="button"
           >
-            Sector público
+            {{ $t('nav.public_sector') }}
             <i class="pi pi-chevron-down text-[0.7rem] transition group-hover:rotate-180"></i>
           </button>
 
           <div class="invisible absolute right-0 top-full z-50 mt-3 w-[340px] translate-y-2 opacity-0 transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
             <div class="overflow-hidden rounded-[1.5rem] border border-teal-100 bg-white p-3 shadow-[0_25px_80px_-35px_rgba(15,118,110,0.5)]">
-              <p class="px-3 pb-2 text-[0.65rem] font-black uppercase tracking-[0.3em] text-slate-400">Módulos funcionales</p>
+              <p class="px-3 pb-2 text-[0.65rem] font-black uppercase tracking-[0.3em] text-slate-400">{{ $t('nav.modulos_funcionales') }}</p>
               <router-link
                 v-for="module in publicSectorModules"
                 :key="module.path"
@@ -92,7 +92,7 @@
             to="/login"
             class="rounded-full border-2 border-[#F97316] px-5 py-2 text-sm font-bold text-[#F97316] transition-all hover:bg-orange-50"
           >
-            Iniciar Sesión
+            {{ $t('nav.iniciar_sesion') }}
           </router-link>
           <a
             href="/doname"
@@ -100,8 +100,22 @@
             rel="noreferrer"
             class="rounded-full bg-gradient-to-r from-[#F97316] to-[#991a73] px-5 py-2 text-sm font-bold text-white shadow-md transition-colors hover:from-[#EA580C] hover:to-[#7d155f]"
           >
-            Doname
+            {{ $t('nav.doname') }}
           </a>
+
+          <!-- Language Switcher Desktop -->
+          <div class="relative group">
+            <button class="flex items-center gap-1 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-gray-700 shadow-sm transition hover:border-[#F97316] hover:text-[#F97316]">
+              <i class="pi pi-globe"></i> {{ locale === 'es' ? 'ES' : locale === 'ay' ? 'AY' : 'QU' }}
+            </button>
+            <div class="invisible absolute right-0 top-full z-50 mt-2 w-32 translate-y-2 opacity-0 transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+              <div class="overflow-hidden rounded-[1rem] border border-gray-100 bg-white p-2 shadow-lg">
+                <button @click="changeGoogleLanguage('es')" class="block w-full rounded-lg text-left px-3 py-2 text-sm hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'es'}">Español</button>
+                <button @click="changeGoogleLanguage('ay')" class="block w-full rounded-lg text-left px-3 py-2 text-sm hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'ay'}">Aymara</button>
+                <button @click="changeGoogleLanguage('qu')" class="block w-full rounded-lg text-left px-3 py-2 text-sm hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'qu'}">Quechua</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -164,7 +178,7 @@
 
             <details class="rounded-xl border border-teal-100 bg-white">
               <summary class="flex cursor-pointer list-none items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold text-[#0F766E]">
-                <span>Sector público</span>
+                <span>{{ $t('nav.public_sector') }}</span>
                 <i class="pi pi-chevron-down text-xs"></i>
               </summary>
               <div class="space-y-2 px-3 pb-3">
@@ -193,15 +207,23 @@
               class="mt-2 block rounded-xl bg-gradient-to-r from-[#F97316] to-[#991a73] px-4 py-3 text-center text-sm font-bold text-white transition-colors hover:from-[#EA580C] hover:to-[#7d155f]"
               @click="closeDrawer"
             >
-              Doname
+              {{ $t('nav.doname') }}
             </a>
+
+            <!-- Language Switcher Mobile -->
+            <div class="mt-4 border-t border-gray-100 pt-4">
+              <p class="px-4 text-xs font-bold text-gray-400 mb-2 uppercase">Idioma</p>
+              <button @click="changeGoogleLanguage('es'); closeDrawer()" class="block w-full text-left py-3 px-4 rounded-xl text-sm font-semibold text-gray-700 hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'es'}">Español</button>
+              <button @click="changeGoogleLanguage('ay'); closeDrawer()" class="block w-full text-left py-3 px-4 rounded-xl text-sm font-semibold text-gray-700 hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'ay'}">Aymara</button>
+              <button @click="changeGoogleLanguage('qu'); closeDrawer()" class="block w-full text-left py-3 px-4 rounded-xl text-sm font-semibold text-gray-700 hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'qu'}">Quechua</button>
+            </div>
 
             <router-link
               to="/login"
               class="mt-2 block rounded-xl border-2 border-[#F97316] px-4 py-3 text-center text-sm font-bold text-[#F97316] transition-all hover:bg-orange-50"
               @click="closeDrawer"
             >
-              Iniciar Sesión
+              {{ $t('nav.iniciar_sesion') }}
             </router-link>
           </div>
         </div>
@@ -211,8 +233,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 type ChildLink = {
   key: string;
@@ -228,101 +251,102 @@ type MenuSection = {
 };
 
 const route = useRoute();
+const { t, locale } = useI18n({ useScope: 'global' });
 
-const menuSections: MenuSection[] = [
-  { key: 'inicio', label: 'Inicio', to: '/' },
+const menuSections = computed<MenuSection[]>(() => [
+  { key: 'inicio', label: t('nav.home'), to: '/' },
   {
     key: 'nuestra-labor',
-    label: 'Nuestra Labor',
+    label: t('nav.nuestra_labor'),
     to: '/nuestra-labor',
     children: [
-      { key: 'labor-conocenos', label: 'Conocenos', to: '/conocenos' },
-      { key: 'labor-bolivia', label: 'MNMNS en Bolivia', to: '/nuestra-labor/mnmns-en-bolivia' },
-      { key: 'labor-representante', label: 'Representante', to: '/nuestra-labor/representante' },
+      { key: 'labor-conocenos', label: t('nav.about'), to: '/conocenos' },
+      { key: 'labor-bolivia', label: t('nav.mnmns_bolivia'), to: '/nuestra-labor/mnmns-en-bolivia' },
+      { key: 'labor-representante', label: t('nav.representante'), to: '/nuestra-labor/representante' },
       {
         key: 'labor-lac',
-        label: 'MNMNS y cooperación regional',
+        label: t('nav.coop_regional'),
         to: '/nuestra-labor/mnmns-america-latina-caribe'
       },
-      { key: 'labor-global', label: 'MNMNS y cooperación internacional', to: '/nuestra-labor/mnmns-global' }
+      { key: 'labor-global', label: t('nav.coop_internacional'), to: '/nuestra-labor/mnmns-global' }
     ]
   },
   {
     key: 'que-hacemos',
-    label: 'Que hacemos',
+    label: t('nav.que_hacemos'),
     to: '/que-hacemos',
     children: [
       {
         key: 'qh-politicas',
-        label: 'Politicas publicas',
+        label: t('nav.politicas_publicas'),
         to: '/que-hacemos/politicas-publicas-rendicion-cuentas'
       },
       {
         key: 'qh-acceso',
-        label: 'Acceso a calidad de servicios de atencion',
+        label: t('nav.acceso_calidad'),
         to: '/que-hacemos/acceso-calidad-servicios-atencion'
       },
       {
         key: 'qh-transformacion',
-        label: 'Transformacion de las normas sociales de genero',
+        label: t('nav.transformacion_normas'),
         to: '/que-hacemos/transformacion-normas-sociales-genero'
       },
-      { key: 'qh-datos', label: 'Datos', to: '/datos' }
+      { key: 'qh-datos', label: t('nav.data'), to: '/datos' }
     ]
   },
   {
     key: 'comunidad',
-    label: 'Comunidad',
+    label: t('nav.comunidad'),
     to: '/comunidad',
     children: [
-      { key: 'com-blog', label: 'Blog', to: '/blog' },
-      { key: 'com-noticias', label: 'Ultimas Noticias', to: '/noticias' },
-      { key: 'com-publicaciones', label: 'Publicaciones', to: '/comunidad/publicaciones' },
-      { key: 'com-campanas', label: 'Campanas', to: '/comunidad/campanas' },
-      { key: 'com-multimedia', label: 'Multimedia', to: '/comunidad/multimedia' },
-      { key: 'com-instituciones', label: 'Instituciones', to: '/instituciones' }
+      { key: 'com-blog', label: t('nav.blog'), to: '/blog' },
+      { key: 'com-noticias', label: t('nav.news'), to: '/noticias' },
+      { key: 'com-publicaciones', label: t('nav.publicaciones'), to: '/comunidad/publicaciones' },
+      { key: 'com-campanas', label: t('nav.campanas'), to: '/comunidad/campanas' },
+      { key: 'com-multimedia', label: t('nav.multimedia'), to: '/comunidad/multimedia' },
+      { key: 'com-instituciones', label: t('nav.institutions'), to: '/instituciones' }
     ]
   },
-  { key: 'contactanos', label: 'Contactanos', to: '/contactanos' }
-];
+  { key: 'contactanos', label: t('nav.contact'), to: '/contactanos' }
+]);
 
-const publicSectorModules = [
+const publicSectorModules = computed(() => [
   {
     path: '/sector-publico/asistente-obstetrico',
-    label: 'Asistente obstétrico',
-    description: 'Cálculo local de FUM y cronograma prenatal.',
+    label: t('nav.asistente_obstetrico'),
+    description: t('nav.asistente_desc'),
     icon: 'pi pi-calendar',
     accent: 'from-[#F97316] to-[#FB7185]'
   },
   {
     path: '/sector-publico/geolocalizador',
-    label: 'Geolocalizador',
-    description: 'Distancias y centros de salud cercanos.',
+    label: t('nav.geolocalizador'),
+    description: t('nav.geolocalizador_desc'),
     icon: 'pi pi-map-marker',
     accent: 'from-[#0F766E] to-[#14B8A6]'
   },
   {
     path: '/dashboard/sector-publico/near-miss',
-    label: 'Morbilidad Materna',
-    description: 'Registro Near-Miss y 3 Demoras.',
+    label: t('nav.morbilidad'),
+    description: t('nav.morbilidad_desc'),
     icon: 'pi pi-heartbeat',
     accent: 'from-[#EC4899] to-[#F43F5E]'
   },
   {
     path: '/sector-publico/alarma-panico',
-    label: 'Señales de alarma',
-    description: 'Síntomas críticos y botón de pánico.',
+    label: t('nav.senales_alarma'),
+    description: t('nav.senales_desc'),
     icon: 'pi pi-bell',
     accent: 'from-[#991B1B] to-[#F97316]'
   },
   {
     path: '/sector-publico/salud-adolescente',
-    label: 'Salud adolescente',
-    description: 'Consultas anónimas por token local.',
+    label: t('nav.salud_adolescente'),
+    description: t('nav.salud_desc'),
     icon: 'pi pi-comments',
     accent: 'from-[#7C3AED] to-[#F97316]'
   }
-];
+]);
 
 const isDrawerOpen = ref(false);
 const openDesktopMenu = ref<string | null>(null);
@@ -358,6 +382,22 @@ const isSectionActive = (section: MenuSection) => {
   }
 
   return section.children.some((child) => isRouteActive(child.to));
+};
+
+const changeGoogleLanguage = (langCode: string) => {
+  locale.value = langCode;
+  
+  // Try to use the Google Translate select element if it's rendered
+  const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+  if (select) {
+    select.value = langCode;
+    select.dispatchEvent(new Event('change'));
+  } else {
+    // Fallback: Set cookie and reload
+    document.cookie = `googtrans=/es/${langCode}; path=/`;
+    document.cookie = `googtrans=/es/${langCode}; path=/; domain=${window.location.hostname}`;
+    window.location.reload();
+  }
 };
 </script>
 

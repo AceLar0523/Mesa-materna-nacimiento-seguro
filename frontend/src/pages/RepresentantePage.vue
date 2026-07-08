@@ -1,19 +1,19 @@
 <template>
   <div class="min-h-screen bg-gray-50 pt-20">
     <PageHero
-      kicker="Perfil institucional"
-      title="Representantes"
-      subtitle="Los líderes técnicos y políticos que impulsan la salud materna en Bolivia"
+      :kicker="$t('representante_page.hero_kicker')"
+      :title="$t('representante_page.hero_title')"
+      :subtitle="$t('representante_page.hero_subtitle')"
       backgroundImage="/img/fondo2.jpg"
     />
 
     <!-- Sección de Representantes -->
     <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <div class="mb-12">
-        <p class="text-sm font-bold uppercase tracking-[0.2em] text-[#F97316]">Equipo de representantes</p>
-        <h2 class="mt-3 text-4xl font-extrabold text-gray-900">Líderes institucionales de la MNMNS</h2>
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-[#F97316]">{{ $t('representante_page.representatives_section_kicker') }}</p>
+        <h2 class="mt-3 text-4xl font-extrabold text-gray-900">{{ $t('representante_page.representatives_section_title') }}</h2>
         <p class="mt-4 max-w-3xl text-gray-600">
-          Conoce al equipo de especialistas que lidera el trabajo técnico, político y coordinador de la Mesa Nacional de Maternidad y Nacimiento Seguros en Bolivia.
+          {{ $t('representante_page.representatives_section_description') }}
         </p>
       </div>
 
@@ -60,7 +60,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
-                title="LinkedIn"
+                :title="$t('representante_page.linkedin_title')"
               >
                 <span class="text-sm font-bold">in</span>
               </a>
@@ -70,7 +70,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
-                title="Facebook"
+                :title="$t('representante_page.facebook_title')"
               >
                 <span class="text-sm font-bold">f</span>
               </a>
@@ -83,8 +83,8 @@
     <!-- Sección de Contexto Institucional -->
     <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <div class="mb-12">
-        <p class="text-sm font-bold uppercase tracking-[0.2em] text-[#F97316]">Contexto institucional</p>
-        <h2 class="mt-3 text-4xl font-extrabold text-gray-900">Rol y responsabilidades del equipo</h2>
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-[#F97316]">{{ $t('representante_page.context_section_kicker') }}</p>
+        <h2 class="mt-3 text-4xl font-extrabold text-gray-900">{{ $t('representante_page.context_section_title') }}</h2>
       </div>
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -93,13 +93,13 @@
           <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[#F97316]/10">
             <span class="text-2xl">🏛️</span>
           </div>
-          <h3 class="mt-4 text-xl font-bold text-gray-900">Coordinación Técnica</h3>
+          <h3 class="mt-4 text-xl font-bold text-gray-900">{{ $t('representante_page.coordination_card_title') }}</h3>
           <p class="mt-3 text-gray-600">
-            Articulación de procesos técnicos en salud materna y neonatal con instituciones públicas, privadas y de cooperación internacional para armonizar esfuerzos.
+            {{ $t('representante_page.coordination_card_description') }}
           </p>
           <div class="mt-5 flex flex-wrap gap-2">
-            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">Protocolos</span>
-            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">Estándares</span>
+            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">{{ $t('representante_page.coordination_tag1') }}</span>
+            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">{{ $t('representante_page.coordination_tag2') }}</span>
           </div>
         </div>
 
@@ -108,13 +108,13 @@
           <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[#F97316]/10">
             <span class="text-2xl">📚</span>
           </div>
-          <h3 class="mt-4 text-xl font-bold text-gray-900">Fortalecimiento de Capacidades</h3>
+          <h3 class="mt-4 text-xl font-bold text-gray-900">{{ $t('representante_page.capacity_card_title') }}</h3>
           <p class="mt-3 text-gray-600">
-            Impulso de capacitación continua para personal sanitario en prácticas basadas en evidencia, reducción de violencia obstétrica y atención respetuosa e intercultural.
+            {{ $t('representante_page.capacity_card_description') }}
           </p>
           <div class="mt-5 flex flex-wrap gap-2">
-            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">Entrenamiento</span>
-            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">Educación</span>
+            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">{{ $t('representante_page.capacity_tag1') }}</span>
+            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">{{ $t('representante_page.capacity_tag2') }}</span>
           </div>
         </div>
 
@@ -123,13 +123,13 @@
           <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[#F97316]/10">
             <span class="text-2xl">📊</span>
           </div>
-          <h3 class="mt-4 text-xl font-bold text-gray-900">Monitoreo y Evaluación</h3>
+          <h3 class="mt-4 text-xl font-bold text-gray-900">{{ $t('representante_page.monitoring_card_title') }}</h3>
           <p class="mt-3 text-gray-600">
-            Seguimiento de indicadores de salud materna-neonatal, análisis de mortalidad evitable y generación de evidencia para recomendaciones estratégicas.
+            {{ $t('representante_page.monitoring_card_description') }}
           </p>
           <div class="mt-5 flex flex-wrap gap-2">
-            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">Datos</span>
-            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">Análisis</span>
+            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">{{ $t('representante_page.monitoring_tag1') }}</span>
+            <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#F97316]">{{ $t('representante_page.monitoring_tag2') }}</span>
           </div>
         </div>
       </div>
@@ -140,27 +140,27 @@
       <div class="rounded-[2rem] bg-gradient-to-r from-gray-900 to-gray-800 p-12 text-white shadow-2xl overflow-hidden relative">
         <div class="absolute -right-20 -top-20 h-40 w-40 bg-[#F97316]/20 rounded-full blur-3xl"></div>
         <div class="relative z-10">
-          <p class="text-sm font-bold uppercase tracking-[0.2em] text-orange-300">Nuestra misión</p>
-          <h2 class="mt-4 text-4xl font-extrabold md:text-5xl">Reducir brechas territoriales en salud materna</h2>
+          <p class="text-sm font-bold uppercase tracking-[0.2em] text-orange-300">{{ $t('representante_page.mission_kicker') }}</p>
+          <h2 class="mt-4 text-4xl font-extrabold md:text-5xl">{{ $t('representante_page.mission_title') }}</h2>
           <p class="mt-6 max-w-3xl text-lg text-gray-300 leading-relaxed">
-            La Mesa Nacional de Maternidad y Nacimiento Seguros (MNMNS) trabaja incansablemente para garantizar que cada mujer en Bolivia acceda a servicios de salud de calidad, respetuosos e interculturales. Nuestro equipo de especialistas coordina esfuerzos políticos, técnicos y operativos para transformar la realidad de la salud materna.
+            {{ $t('representante_page.mission_description') }}
           </p>
 
           <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
             <div class="rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
               <p class="text-3xl font-bold text-orange-300">5</p>
-              <p class="mt-2 text-sm font-semibold text-gray-300">Representantes institucionales</p>
-              <p class="mt-1 text-xs text-gray-400">Liderando desde sectores estratégicos</p>
+              <p class="mt-2 text-sm font-semibold text-gray-300">{{ $t('representante_page.stats_reps_title') }}</p>
+              <p class="mt-1 text-xs text-gray-400">{{ $t('representante_page.stats_reps_description') }}</p>
             </div>
             <div class="rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
               <p class="text-3xl font-bold text-orange-300">9</p>
-              <p class="mt-2 text-sm font-semibold text-gray-300">Departamentos cubiertos</p>
-              <p class="mt-1 text-xs text-gray-400">Cobertura en territorio boliviano</p>
+              <p class="mt-2 text-sm font-semibold text-gray-300">{{ $t('representante_page.stats_depts_title') }}</p>
+              <p class="mt-1 text-xs text-gray-400">{{ $t('representante_page.stats_depts_description') }}</p>
             </div>
             <div class="rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
               <p class="text-3xl font-bold text-orange-300">100%</p>
-              <p class="mt-2 text-sm font-semibold text-gray-300">Compromiso compartido</p>
-              <p class="mt-1 text-xs text-gray-400">Hacia cero muertes maternas evitables</p>
+              <p class="mt-2 text-sm font-semibold text-gray-300">{{ $t('representante_page.stats_commitment_title') }}</p>
+              <p class="mt-1 text-xs text-gray-400">{{ $t('representante_page.stats_commitment_description') }}</p>
             </div>
           </div>
         </div>
@@ -170,10 +170,10 @@
     <!-- Sección de Áreas Clave -->
     <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <div class="mb-12">
-        <p class="text-sm font-bold uppercase tracking-[0.2em] text-[#F97316]">Pilares de trabajo</p>
-        <h2 class="mt-3 text-4xl font-extrabold text-gray-900">Estrategias integradas de atención</h2>
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-[#F97316]">{{ $t('representante_page.pillars_kicker') }}</p>
+        <h2 class="mt-3 text-4xl font-extrabold text-gray-900">{{ $t('representante_page.pillars_title') }}</h2>
         <p class="mt-4 max-w-3xl text-gray-600">
-          Nuestro trabajo se fundamenta en cuatro pilares que enfrentan los desafíos de la salud materna desde múltiples perspectivas.
+          {{ $t('representante_page.pillars_description') }}
         </p>
       </div>
 
@@ -183,22 +183,22 @@
           <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100">
             <span class="text-3xl">🏥</span>
           </div>
-          <h3 class="mt-6 text-2xl font-bold text-gray-900">Calidad de Atención Obstétrica</h3>
+          <h3 class="mt-6 text-2xl font-bold text-gray-900">{{ $t('representante_page.pillar1_title') }}</h3>
           <p class="mt-4 text-gray-600">
-            Implementación de protocolos basados en evidencia para parto seguro, prevención de hemorragias posparto, manejo de complicaciones obstétricas y fortalecimiento de redes de referencia especializada.
+            {{ $t('representante_page.pillar1_description') }}
           </p>
           <ul class="mt-6 space-y-2">
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Protocolos de atención obstétrica</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar1_item1') }}</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Sistemas de derivación ágil</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar1_item2') }}</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Equipamiento y medicamentos esenciales</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar1_item3') }}</span>
             </li>
           </ul>
         </div>
@@ -208,22 +208,22 @@
           <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100">
             <span class="text-3xl">🤝</span>
           </div>
-          <h3 class="mt-6 text-2xl font-bold text-gray-900">Atención Intercultural y Respetuosa</h3>
+          <h3 class="mt-6 text-2xl font-bold text-gray-900">{{ $t('representante_page.pillar2_title') }}</h3>
           <p class="mt-4 text-gray-600">
-            Integración de saberes de comunidades indígenas y campesinas con medicina académica bajo la Política SAFCI (Salud Familiar Comunitaria Intercultural).
+            {{ $t('representante_page.pillar2_description') }}
           </p>
           <ul class="mt-6 space-y-2">
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Respeto a prácticas tradicionales</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar2_item1') }}</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Eliminación de violencia obstétrica</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar2_item2') }}</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Partos dignos y participativos</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar2_item3') }}</span>
             </li>
           </ul>
         </div>
@@ -233,22 +233,22 @@
           <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100">
             <span class="text-3xl">📋</span>
           </div>
-          <h3 class="mt-6 text-2xl font-bold text-gray-900">Derechos Sexuales y Reproductivos</h3>
+          <h3 class="mt-6 text-2xl font-bold text-gray-900">{{ $t('representante_page.pillar3_title') }}</h3>
           <p class="mt-4 text-gray-600">
-            Ampliación del acceso a servicios de planificación familiar, anticoncepción, y atención a complicaciones del aborto con enfoque de derechos humanos.
+            {{ $t('representante_page.pillar3_description') }}
           </p>
           <ul class="mt-6 space-y-2">
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Planificación familiar accesible</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar3_item1') }}</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Atención integral en adolescencia</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar3_item2') }}</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Equidad de género en salud</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar3_item3') }}</span>
             </li>
           </ul>
         </div>
@@ -258,22 +258,22 @@
           <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100">
             <span class="text-3xl">📊</span>
           </div>
-          <h3 class="mt-6 text-2xl font-bold text-gray-900">Análisis de Mortalidad y Vigilancia</h3>
+          <h3 class="mt-6 text-2xl font-bold text-gray-900">{{ $t('representante_page.pillar4_title') }}</h3>
           <p class="mt-4 text-gray-600">
-            Vigilancia sistemática de muertes maternas y perinatales para identificar causas evitables y generar recomendaciones estratégicas basadas en evidencia.
+            {{ $t('representante_page.pillar4_description') }}
           </p>
           <ul class="mt-6 space-y-2">
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Sistemas de registro y vigilancia</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar4_item1') }}</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Auditorías de calidad periódicas</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar4_item2') }}</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-[#F97316] font-bold">✓</span>
-              <span class="text-sm text-gray-600">Evaluación de resultados sanitarios</span>
+              <span class="text-sm text-gray-600">{{ $t('representante_page.pillar4_item3') }}</span>
             </li>
           </ul>
         </div>
@@ -288,6 +288,9 @@
 import { onMounted } from 'vue';
 import PageHero from '@/components/common/PageHero.vue';
 import Footer from '@/components/landing/Footer/Footer.vue';
+import { useI18n } from 'vue-i18n'; // Add this import
+
+const { t } = useI18n(); // Initialize t function
 
 interface Representative {
   id: number;
@@ -403,7 +406,7 @@ const sources = [
 ];
 
 onMounted(() => {
-  document.title = 'Representantes | MNMNS Bolivia';
+  document.title = t('representante_page.document_title');
   window.scrollTo(0, 0);
 });
 </script>

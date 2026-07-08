@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.16),_transparent_34%),linear-gradient(180deg,#effdfb_0%,#ffffff_54%,#fff7ed_100%)] pt-20 text-slate-900">
     <PageHero
-      kicker="Sector público"
-      title="Geolocalizador de centros de salud"
-      subtitle="Ubica centros reales en Leaflet, filtra por complejidad y usa fallback por IP cuando el GPS no responde."
+      :kicker="$t('geolocalizador_centros_page.kicker_public_sector')"
+      :title="$t('geolocalizador_centros_page.title_health_center_geolocator')"
+      :subtitle="$t('geolocalizador_centros_page.subtitle_geolocator')"
       backgroundImage="/img/fondo14.avif"
     />
 
@@ -12,8 +12,8 @@
         <div class="rounded-[2.2rem] border border-teal-100 bg-white/92 p-6 shadow-[0_25px_80px_-38px_rgba(20,184,166,0.55)] backdrop-blur">
           <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p class="text-xs font-bold uppercase tracking-[0.3em] text-teal-600">Ubicación activa</p>
-              <h2 class="mt-2 text-2xl font-black text-slate-900">Centros ordenados por distancia</h2>
+              <p class="text-xs font-bold uppercase tracking-[0.3em] text-teal-600">{{ $t('geolocalizador_centros_page.active_location') }}</p>
+              <h2 class="mt-2 text-2xl font-black text-slate-900">{{ $t('geolocalizador_centros_page.centers_sorted_by_distance') }}</h2>
             </div>
             <div class="rounded-2xl bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700">
               {{ currentPositionLabel }}
@@ -22,24 +22,24 @@
 
           <div class="mt-6 grid gap-4 md:grid-cols-3">
             <article class="rounded-[1.8rem] border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-white p-5 shadow-sm">
-              <p class="text-xs font-bold uppercase tracking-[0.25em] text-teal-600">Centros</p>
+              <p class="text-xs font-bold uppercase tracking-[0.25em] text-teal-600">{{ $t('geolocalizador_centros_page.centers') }}</p>
               <p class="mt-3 text-5xl font-black text-slate-900">{{ centers.length }}</p>
-              <p class="mt-1 text-sm text-slate-600">Hospitales, hospitales municipales y centros de salud</p>
+              <p class="mt-1 text-sm text-slate-600">{{ $t('geolocalizador_centros_page.description_centers') }}</p>
             </article>
             <article class="rounded-[1.8rem] border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-white p-5 shadow-sm">
-              <p class="text-xs font-bold uppercase tracking-[0.25em] text-orange-500">Filtrado</p>
+              <p class="text-xs font-bold uppercase tracking-[0.25em] text-orange-500">{{ $t('geolocalizador_centros_page.filtered') }}</p>
               <p class="mt-3 text-5xl font-black text-slate-900">{{ visibleCenters.length }}</p>
               <p class="mt-1 text-sm text-slate-600">{{ activeLevelLabel }}</p>
             </article>
             <article class="rounded-[1.8rem] border border-rose-100 bg-gradient-to-br from-rose-50 via-white to-white p-5 shadow-sm">
-              <p class="text-xs font-bold uppercase tracking-[0.25em] text-rose-500">Más cercano</p>
-              <p class="mt-3 text-2xl font-black text-slate-900">{{ nearestCenter?.nombre ?? '0' }}</p>
-              <p class="mt-1 text-sm text-slate-600">{{ nearestCenter ? `${nearestCenter.distance.toFixed(1)} km` : '0 km' }}</p>
+              <p class="text-xs font-bold uppercase tracking-[0.25em] text-rose-500">{{ $t('geolocalizador_centros_page.nearest') }}</p>
+              <p class="mt-3 text-2xl font-black text-slate-900">{{ nearestCenter?.nombre ?? $t('geolocalizador_centros_page.zero_value') }}</p>
+              <p class="mt-1 text-sm text-slate-600">{{ nearestCenter ? `${nearestCenter.distance.toFixed(1)} km` : $t('geolocalizador_centros_page.zero_km') }}</p>
             </article>
           </div>
 
           <div class="mt-6 space-y-3">
-            <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Nivel de complejidad</p>
+            <p class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">{{ $t('geolocalizador_centros_page.complexity_level') }}</p>
             <div class="flex flex-wrap gap-2">
               <button
                 v-for="level in levelFilters"
@@ -56,11 +56,11 @@
 
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             <label class="space-y-2">
-              <span class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Latitud manual</span>
+              <span class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">{{ $t('geolocalizador_centros_page.manual_latitude') }}</span>
               <input v-model="manualLatitude" type="number" step="0.000001" class="input-base" />
             </label>
             <label class="space-y-2">
-              <span class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Longitud manual</span>
+              <span class="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">{{ $t('geolocalizador_centros_page.manual_longitude') }}</span>
               <input v-model="manualLongitude" type="number" step="0.000001" class="input-base" />
             </label>
           </div>
@@ -71,26 +71,26 @@
               class="rounded-full bg-gradient-to-r from-[#0F766E] to-[#14B8A6] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-teal-200 transition hover:-translate-y-0.5"
               @click="requestCurrentLocation"
             >
-              Detectar mi ubicación
+              {{ $t('geolocalizador_centros_page.detect_my_location') }}
             </button>
             <button
               type="button"
               class="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-teal-200 hover:text-teal-700"
               @click="applyManualPosition"
             >
-              Usar coordenadas manuales
+              {{ $t('geolocalizador_centros_page.use_manual_coordinates') }}
             </button>
             <button
               type="button"
               class="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-teal-200 hover:text-teal-700"
               @click="loadCenters"
             >
-              Actualizar centros
+              {{ $t('geolocalizador_centros_page.update_centers') }}
             </button>
           </div>
 
           <p class="mt-4 text-sm text-slate-500">{{ statusMessage }}</p>
-          <p class="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Ultima sincronizacion: {{ lastSyncLabel }}</p>
+          <p class="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{{ $t('geolocalizador_centros_page.last_sync') }}: {{ lastSyncLabel }}</p>
         </div>
 
         <div class="space-y-4">
@@ -111,14 +111,14 @@
               </div>
               <div class="text-right">
                 <p class="text-sm font-bold text-teal-600">{{ center.distance.toFixed(1) }} km</p>
-                <p class="text-xs text-slate-500">desde tu posición</p>
+                <p class="text-xs text-slate-500">{{ $t('geolocalizador_centros_page.from_your_position') }}</p>
               </div>
             </div>
 
             <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-slate-600">
-              <span class="rounded-full bg-slate-100 px-3 py-1">{{ center.horario || 'Horario no cargado' }}</span>
+              <span class="rounded-full bg-slate-100 px-3 py-1">{{ center.horario || $t('geolocalizador_centros_page.schedule_not_loaded') }}</span>
               <span class="rounded-full bg-slate-100 px-3 py-1">{{ center.telefono }}</span>
-              <span class="rounded-full bg-slate-100 px-3 py-1">{{ center.ambulancia_disponible ? 'Ambulancia disponible' : 'Sin ambulancia' }}</span>
+              <span class="rounded-full bg-slate-100 px-3 py-1">{{ center.ambulancia_disponible ? $t('geolocalizador_centros_page.ambulance_available') : $t('geolocalizador_centros_page.no_ambulance') }}</span>
             </div>
           </article>
         </div>
@@ -129,8 +129,8 @@
           <div class="rounded-[1.65rem] border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.24),_transparent_32%),linear-gradient(180deg,rgba(15,118,110,0.92),rgba(15,23,42,0.96))] p-5 text-white">
             <div class="flex items-center justify-between gap-3">
               <div>
-                <p class="text-xs font-bold uppercase tracking-[0.35em] text-teal-200">Mapa interactivo</p>
-                <h2 class="mt-2 text-2xl font-black">Leaflet en tiempo real</h2>
+                <p class="text-xs font-bold uppercase tracking-[0.35em] text-teal-200">{{ $t('geolocalizador_centros_page.interactive_map') }}</p>
+                <h2 class="mt-2 text-2xl font-black">{{ $t('geolocalizador_centros_page.leaflet_realtime') }}</h2>
               </div>
               <div class="rounded-2xl bg-white/10 px-3 py-2 text-xs font-semibold text-teal-100">
                 {{ activeLevelLabel }}
@@ -142,13 +142,13 @@
         </div>
 
         <div v-if="activeCenter" class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-lg">
-          <p class="text-xs font-bold uppercase tracking-[0.3em] text-slate-500">Ficha rápida</p>
+          <p class="text-xs font-bold uppercase tracking-[0.3em] text-slate-500">{{ $t('geolocalizador_centros_page.quick_sheet') }}</p>
           <h3 class="mt-2 text-2xl font-black text-slate-900">{{ activeCenter.nombre }}</h3>
           <div class="mt-4 space-y-3 text-sm text-slate-600">
-            <p><strong class="text-slate-800">Dirección:</strong> {{ activeCenter.direccion }}</p>
-            <p><strong class="text-slate-800">Teléfono:</strong> {{ activeCenter.telefono }}</p>
-            <p><strong class="text-slate-800">Emergencia:</strong> {{ activeCenter.telefono_emergencia || 'No registrado' }}</p>
-            <p><strong class="text-slate-800">Ambulancia:</strong> {{ activeCenter.ambulancia_disponible ? 'Disponible' : 'No disponible' }}</p>
+            <p><strong class="text-slate-800">{{ $t('geolocalizador_centros_page.address') }}:</strong> {{ activeCenter.direccion }}</p>
+            <p><strong class="text-slate-800">{{ $t('geolocalizador_centros_page.phone') }}:</strong> {{ activeCenter.telefono }}</p>
+            <p><strong class="text-slate-800">{{ $t('geolocalizador_centros_page.emergency') }}:</strong> {{ activeCenter.telefono_emergencia || $t('geolocalizador_centros_page.not_registered') }}</p>
+            <p><strong class="text-slate-800">{{ $t('geolocalizador_centros_page.ambulance') }}:</strong> {{ activeCenter.ambulancia_disponible ? $t('geolocalizador_centros_page.available') : $t('geolocalizador_centros_page.not_available') }}</p>
           </div>
         </div>
 
@@ -170,6 +170,9 @@ import Footer from '@/components/landing/Footer/Footer.vue';
 import PageHero from '@/components/common/PageHero.vue';
 import { apiUrl } from '@/utils/api';
 import { calculateDistanceKm, toApiList, type GeoPoint, type HealthCenter, type PublicSectorLevel, type PublicSectorLevelFilter, toNumber } from './public-sector';
+import { useI18n } from 'vue-i18n'; // Import useI18n
+
+const { t } = useI18n(); // Initialize useI18n
 
 type CenterWithDistance = HealthCenter & { distance: number };
 
@@ -190,7 +193,7 @@ const activeCenter = ref<CenterWithDistance | null>(null);
 const currentPosition = ref<GeoPoint>({ latitude: -16.5, longitude: -68.15 });
 const manualLatitude = ref('-16.500000');
 const manualLongitude = ref('-68.150000');
-const statusMessage = ref('Cargando centros de salud y preparando el mapa...');
+const statusMessage = ref(t('geolocalizador_centros_page.status_loading_centers'));
 const lastSyncAt = ref<Date | null>(null);
 const mapContainer = ref<HTMLDivElement | null>(null);
 
@@ -201,17 +204,17 @@ let watchId: number | null = null;
 let refreshIntervalId: number | null = null;
 
 const levelFilters: Array<{ key: PublicSectorLevelFilter; label: string }> = [
-  { key: 'all', label: 'Todos' },
-  { key: 'I', label: 'Nivel I' },
-  { key: 'II', label: 'Nivel II' },
-  { key: 'III', label: 'Nivel III' },
+  { key: 'all', label: t('geolocalizador_centros_page.filter_all') },
+  { key: 'I', label: t('geolocalizador_centros_page.filter_level_i') },
+  { key: 'II', label: t('geolocalizador_centros_page.filter_level_ii') },
+  { key: 'III', label: t('geolocalizador_centros_page.filter_level_iii') },
 ];
 
-const activeLevelLabel = computed(() => levelFilters.find((item) => item.key === activeLevel.value)?.label ?? 'Todos');
+const activeLevelLabel = computed(() => levelFilters.find((item) => item.key === activeLevel.value)?.label ?? t('geolocalizador_centros_page.filter_all'));
 const currentPositionLabel = computed(() => `${currentPosition.value.latitude.toFixed(4)}, ${currentPosition.value.longitude.toFixed(4)}`);
 const lastSyncLabel = computed(() => {
   if (!lastSyncAt.value) {
-    return 'sin sincronizar';
+    return t('geolocalizador_centros_page.not_synced');
   }
 
   return lastSyncAt.value.toLocaleTimeString('es-BO', {
@@ -262,7 +265,7 @@ function createMap(): void {
     fillOpacity: 1,
   }).addTo(mapInstance);
 
-  currentPositionLayer.bindPopup('Tu ubicación actual');
+  currentPositionLayer.bindPopup(t('geolocalizador_centros_page.your_current_location'));
   renderMapLayers();
 }
 
@@ -319,12 +322,12 @@ async function loadCenters(): Promise<void> {
     const payload = (await response.json()) as unknown;
     const data = toApiList<HealthCenter>(payload);
     centers.value = data.length > 0 ? data : demoCenters;
-    statusMessage.value = data.length > 0 ? 'Centros sincronizados desde la base de datos.' : 'No hay centros cargados todavía, por eso se usan datos semilla.';
+    statusMessage.value = data.length > 0 ? t('geolocalizador_centros_page.status_synced') : t('geolocalizador_centros_page.status_no_centers_demo');
     lastSyncAt.value = new Date();
   } catch (error) {
     centers.value = demoCenters;
-    statusMessage.value = 'La API no respondió. Se activaron centros de demostración para no bloquear la vista.';
-    errorMessage.value = error instanceof Error ? error.message : 'Error inesperado al cargar centros.';
+    statusMessage.value = t('geolocalizador_centros_page.status_api_error_demo');
+    errorMessage.value = error instanceof Error ? error.message : t('geolocalizador_centros_page.error_unexpected_load_centers');
     lastSyncAt.value = new Date();
   }
 }
@@ -334,12 +337,12 @@ function applyManualPosition(): void {
   const longitude = Number.parseFloat(manualLongitude.value);
 
   if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
-    statusMessage.value = 'Ingresa coordenadas válidas para actualizar la posición.';
+    statusMessage.value = t('geolocalizador_centros_page.status_enter_valid_coordinates');
     return;
   }
 
   currentPosition.value = { latitude, longitude };
-  statusMessage.value = 'Posición actualizada manualmente.';
+  statusMessage.value = t('geolocalizador_centros_page.status_manual_position_updated');
 }
 
 async function fallbackByIp(): Promise<void> {
@@ -351,14 +354,14 @@ async function fallbackByIp(): Promise<void> {
       currentPosition.value = { latitude: data.latitude, longitude: data.longitude };
       manualLatitude.value = data.latitude.toFixed(6);
       manualLongitude.value = data.longitude.toFixed(6);
-      statusMessage.value = 'GPS no disponible. Se usó una ubicación aproximada por red.';
+      statusMessage.value = t('geolocalizador_centros_page.status_gps_not_available_ip_fallback');
       return;
     }
   } catch {
     // Fallback silencioso; se mantiene la posición manual por defecto.
   }
 
-  statusMessage.value = 'No se pudo obtener la ubicación automática. Usa la captura manual.';
+  statusMessage.value = t('geolocalizador_centros_page.status_cannot_get_auto_location');
 }
 
 function requestCurrentLocation(): void {
@@ -372,7 +375,7 @@ function requestCurrentLocation(): void {
       currentPosition.value = { latitude: position.coords.latitude, longitude: position.coords.longitude };
       manualLatitude.value = position.coords.latitude.toFixed(6);
       manualLongitude.value = position.coords.longitude.toFixed(6);
-      statusMessage.value = 'Ubicación actualizada en tiempo real.';
+      statusMessage.value = t('geolocalizador_centros_page.status_location_updated_realtime');
     },
     () => {
       void fallbackByIp();
@@ -387,7 +390,7 @@ watch([visibleCenters, currentPosition], () => {
 }, { deep: true });
 
 onMounted(async () => {
-  document.title = 'Geolocalizador de centros | Mesa de Maternidad';
+  document.title = t('geolocalizador_centros_page.document_title');
   await loadCenters();
   await nextTick();
   createMap();
