@@ -14,14 +14,14 @@ BACKEND_DIR = os.path.dirname(CURRENT_DIR)               # /backend/
 PROJECT_ROOT = os.path.dirname(BACKEND_DIR)              # Raíz del repo
 
 # Ubicación de tus TXTs y dónde se guardará la base de datos
-DOCS_DIR = os.path.join(PROJECT_ROOT, "frontend", "doc")
+DOCS_DIR = os.path.join(CURRENT_DIR, "data")
 DB_DIR = os.path.join(CURRENT_DIR, "vector_db")
 
 def build_vector_db():
     print("Iniciando la construcción de la base de datos vectorial...")
     
     # 1. Cargar tus documentos
-    archivos = ["mesainformacion.txt", "representante.txt"]
+    archivos = ["mesainformacion.txt", "representante.txt", "funcionalidades.txt"]
     documentos = []
     
     for archivo in archivos:

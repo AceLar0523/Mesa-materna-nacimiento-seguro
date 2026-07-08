@@ -1,0 +1,26 @@
+Información sobre las Funcionalidades de la Página Web de la Mesa Nacional de Maternidad y Nacimiento Seguros en Bolivia:
+
+La plataforma web de la Mesa Nacional de Maternidad y Nacimiento Seguros tiene como objetivo principal brindar información, apoyo y orientación a la población en general, mujeres gestantes, familias y profesionales de la salud, con un enfoque intercultural y de respeto a los saberes ancestrales. 
+
+A continuación, se detallan las principales funcionalidades de esta plataforma:
+
+1. Asistente Virtual Inteligente (Chatbot):
+   - Provee respuestas inmediatas y empáticas sobre salud materna, embarazo, y nacimiento seguro.
+   - Tiene la capacidad de comunicarse en español y en los idiomas originarios oficiales de Bolivia, principalmente Aymara, Quechua y Guaraní, respetando la diversidad cultural del país.
+   - Ayuda a identificar "señales de peligro" durante el embarazo y el puerperio, recomendando siempre acudir a un centro de salud ante cualquier emergencia.
+
+2. Biblioteca de Información y Normativas:
+   - Acceso a documentos clave sobre la historia y estructura de la Mesa Materna.
+   - Información sobre las "Tres Demoras" y cómo superarlas.
+   - Documentación sobre el modelo SAFCI (Salud Familiar Comunitaria Intercultural) y la adecuación cultural de las salas de parto (ejemplo: parto en posición vertical, acompañamiento familiar, trato respetuoso de la placenta).
+
+3. Información sobre Derechos y Políticas Públicas:
+   - Explicación de los beneficios del Bono Juana Azurduy.
+   - Orientación sobre el Sistema Único de Salud (SUS) y su cobertura gratuita para embarazadas y neonatos.
+   - Información sobre la prevención del embarazo adolescente y el ejercicio de los derechos sexuales y reproductivos.
+
+4. Red de Apoyo y Contactos:
+   - Orientación sobre el funcionamiento de las "Casas Maternas" (albergues de espera para mujeres de zonas rurales).
+   - Datos e información sobre cómo contactar a los representantes y actores de la Mesa (Ministerio de Salud, SEDES, UNFPA, OMS/OPS, UNICEF, Bartolina Sisa, etc.).
+
+Esta plataforma no reemplaza la consulta médica profesional, pero actúa como una herramienta fundamental de promoción de salud, articulación social y prevención de la mortalidad materna.
