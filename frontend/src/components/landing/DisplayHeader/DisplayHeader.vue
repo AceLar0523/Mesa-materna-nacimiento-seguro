@@ -110,9 +110,9 @@
             </button>
             <div class="invisible absolute right-0 top-full z-50 mt-2 w-32 translate-y-2 opacity-0 transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
               <div class="overflow-hidden rounded-[1rem] border border-gray-100 bg-white p-2 shadow-lg">
-                <button @click="changeGoogleLanguage('es')" class="block w-full rounded-lg text-left px-3 py-2 text-sm hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'es'}">Español</button>
-                <button @click="changeGoogleLanguage('ay')" class="block w-full rounded-lg text-left px-3 py-2 text-sm hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'ay'}">Aymara</button>
-                <button @click="changeGoogleLanguage('qu')" class="block w-full rounded-lg text-left px-3 py-2 text-sm hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'qu'}">Quechua</button>
+                <button @click="changeGoogleLanguage('es')" class="block w-full rounded-lg text-left px-3 py-2 text-sm hover:bg-[#F97316]/10" :class="locale === 'es' ? 'text-[#F97316] font-bold' : 'text-gray-700'">Español</button>
+                <button @click="changeGoogleLanguage('ay')" class="block w-full rounded-lg text-left px-3 py-2 text-sm hover:bg-[#F97316]/10" :class="locale === 'ay' ? 'text-[#F97316] font-bold' : 'text-gray-700'">Aymara</button>
+                <button @click="changeGoogleLanguage('qu')" class="block w-full rounded-lg text-left px-3 py-2 text-sm hover:bg-[#F97316]/10" :class="locale === 'qu' ? 'text-[#F97316] font-bold' : 'text-gray-700'">Quechua</button>
               </div>
             </div>
           </div>

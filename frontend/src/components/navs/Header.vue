@@ -36,9 +36,9 @@
                 <i class="pi pi-globe"></i> {{ t('nav.language') }}
               </button>
               <div class="absolute top-full right-0 mt-2 w-32 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <button @click="changeGoogleLanguage('es')" class="block w-full text-left px-4 py-2 text-sm hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'es'}">{{ t('nav.es') }}</button>
-                <button @click="changeGoogleLanguage('ay')" class="block w-full text-left px-4 py-2 text-sm hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'ay'}">{{ t('nav.ay') }}</button>
-                <button @click="changeGoogleLanguage('qu')" class="block w-full text-left px-4 py-2 text-sm hover:bg-[#F97316]/10" :class="{'text-[#F97316] font-bold': locale === 'qu'}">{{ t('nav.qu') }}</button>
+                <button @click="changeGoogleLanguage('es')" class="block w-full text-left px-4 py-2 text-sm hover:bg-[#F97316]/10" :class="locale === 'es' ? 'text-[#F97316] font-bold' : 'text-gray-700'">{{ t('nav.es') }}</button>
+                <button @click="changeGoogleLanguage('ay')" class="block w-full text-left px-4 py-2 text-sm hover:bg-[#F97316]/10" :class="locale === 'ay' ? 'text-[#F97316] font-bold' : 'text-gray-700'">{{ t('nav.ay') }}</button>
+                <button @click="changeGoogleLanguage('qu')" class="block w-full text-left px-4 py-2 text-sm hover:bg-[#F97316]/10" :class="locale === 'qu' ? 'text-[#F97316] font-bold' : 'text-gray-700'">{{ t('nav.qu') }}</button>
               </div>
             </div>
           </div>

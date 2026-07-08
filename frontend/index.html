@@ -102,14 +102,19 @@
     </script>
     <title>Vue Bits - Animated UI Components For Vue</title>
     <style type="text/css">
-      /* Forzar que el banner de Google Translate nunca aparezca */
+      /* Forzar que el banner de Google Translate nunca aparezca (incluyendo nuevas clases) */
+      .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+      .VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc,
       .goog-te-banner-frame.skiptranslate,
-      iframe.goog-te-banner-frame {
+      iframe.goog-te-banner-frame,
+      iframe.skiptranslate {
         display: none !important;
+        visibility: hidden !important;
       }
-      body {
+      html, body {
         top: 0px !important;
         position: static !important;
+        margin-top: 0px !important;
       }
       /* Ocultar tooltips al hacer hover */
       .goog-text-highlight {
@@ -117,6 +122,9 @@
         box-shadow: none !important;
       }
       #goog-gt-tt, .goog-te-balloon-frame {
+        display: none !important;
+      }
+      .goog-tooltip {
         display: none !important;
       }
     </style>
@@ -131,6 +139,23 @@
           { pageLanguage: 'es', includedLanguages: 'es,ay,qu', autoDisplay: false },
           'google_translate_element'
         );
+        
+        // Bucle de seguridad para destruir el banner visual si CSS falla
+        setInterval(function() {
+          var iframes = document.querySelectorAll('.skiptranslate, iframe.goog-te-banner-frame, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf');
+          for (var i = 0; i < iframes.length; i++) {
+            if (iframes[i].nodeName === 'IFRAME') {
+              iframes[i].style.display = 'none';
+              iframes[i].style.visibility = 'hidden';
+            }
+          }
+          var body = document.body;
+          if (body) {
+            body.style.top = '0px';
+            body.style.position = 'static';
+            body.style.marginTop = '0px';
+          }
+        }, 300);
       }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

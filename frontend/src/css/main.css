@@ -3,6 +3,7 @@
 @import './category.css';
 @import './landing.css';
 @import './transitions.css';
+@import './admin.css';
 @import 'tailwindcss';
 
 /* Ocultar elementos visuales de Google Translate */
