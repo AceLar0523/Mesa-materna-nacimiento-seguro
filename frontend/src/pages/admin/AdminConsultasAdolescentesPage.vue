@@ -146,7 +146,17 @@ onBeforeUnmount(() => {
   border-radius: 1rem;
   border: 1px solid rgb(226 232 240);
   background: rgb(248 250 252);
+  color: rgb(15 23 42);
   padding: 0.75rem 1rem;
   outline: none;
+}
+
+.input-base::placeholder {
+  color: rgb(148 163 184);
+}
+
+.input-base:focus {
+  border-color: rgb(124 58 237);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 </style>
